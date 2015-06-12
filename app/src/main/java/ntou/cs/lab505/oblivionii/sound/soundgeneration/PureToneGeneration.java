@@ -1,4 +1,4 @@
-package ntou.cs.lab505.oblivionii.sound.puretone;
+package ntou.cs.lab505.oblivionii.sound.soundgeneration;
 
 /**
  * Created by alan on 6/10/15.
@@ -6,7 +6,6 @@ package ntou.cs.lab505.oblivionii.sound.puretone;
 public class PureToneGeneration {
 
     private int sampleRate;
-    private double db;
 
     /**
      * initial sample rate.
@@ -25,7 +24,7 @@ public class PureToneGeneration {
      */
     public short[] generate(int frequency, int second, double db) {
 
-        this.db = Math.pow(10, db / 20);
+        double targetDb = Math.pow(10, db / 20);
         // create sin wave
         short[] sin = new short[second * sampleRate];
         double samplingInterval = (double) (sampleRate / frequency);
@@ -33,7 +32,7 @@ public class PureToneGeneration {
         for (int i = 0; i < sin.length; i++) {
             double angle = (2.0 * Math.PI * i) / samplingInterval;
 
-            int temp = (int) (Math.sin(angle) * this.db);
+            int temp = (int) (Math.sin(angle) * targetDb);
 
             // avoid vector overflow.
             if (temp > Short.MAX_VALUE) {
@@ -41,7 +40,7 @@ public class PureToneGeneration {
             } else if (temp < Short.MIN_VALUE) {
                 sin[i] = Short.MIN_VALUE;
             } else {
-                sin[i] = (short) (Math.sin(angle) * this.db);
+                sin[i] = (short) (Math.sin(angle) * targetDb);
             }
         }
 

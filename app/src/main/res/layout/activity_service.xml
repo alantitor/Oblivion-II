@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/playButtom_activity_menu"
             android:adjustViewBounds="true"
-            android:src="@drawable/ic_play_red"
+            android:src="@drawable/ic_play_orange"
             android:background="#00000000"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
@@ -54,11 +54,11 @@
             android:layout_weight="1.0" >
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:id="@+id/settingButton_activity_menu"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_setting_orange"
+                android:src="@drawable/ic_test_green"
                 android:background="#00000000"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"

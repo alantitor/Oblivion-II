@@ -301,20 +301,22 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:id="@+id/rg_channel_activity_pure_tone_test">
 
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/rb_channell_activity_pure_tone_test"
-                                android:text="Left"/>
+                                android:id="@+id/rb_channel_left_activity_pure_tone_test"
+                                android:text="Left"
+                                android:checked="true"/>
 
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/rb_channelr_activity_pure_tone_test"
+                                android:id="@+id/rb_channel_right_activity_pure_tone_test"
                                 android:text="Right"/>
 
                         </RadioGroup>
@@ -346,27 +348,29 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:id="@+id/rg_output_activity_pure_tone_test">
 
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/rb_tospeker_activity_pure_tone_test"
-                                android:text="speaker"/>
+                                android:id="@+id/rb_output_speker_activity_pure_tone_test"
+                                android:text="speaker"
+                                android:checked="true"/>
 
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/rb_todf_activity_pure_tone_test"
+                                android:id="@+id/rb_output_df_activity_pure_tone_test"
                                 android:text="data file"/>
 
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:id="@+id/rb_towf_activity_pure_tone_test"
+                                android:id="@+id/rb_output_wf_activity_pure_tone_test"
                                 android:text="wmv file"/>
 
                         </RadioGroup>
