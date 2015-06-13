@@ -106,8 +106,13 @@ public class PureToneTest extends Service {
 
 
         // generate sound.
-        originSoundVector = harmonicsGeneration.generate(valueFreq, valueSec, valueDb, valueHarm);
+        originSoundVector = harmonicsGeneration.generate(valueFreq, valueSec, valueDb, valueHarm, valueChannel);
         saveVectorToDataFile(originSoundVector, "origin");
+        /**
+         * check soundVector correctness.
+         */
+
+
         // shift sound frequency.
 
         // filter sound.

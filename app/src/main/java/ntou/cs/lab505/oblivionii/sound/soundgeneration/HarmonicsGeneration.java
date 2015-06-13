@@ -1,6 +1,6 @@
 package ntou.cs.lab505.oblivionii.sound.soundgeneration;
 
-import android.util.Log;
+import static ntou.cs.lab505.oblivionii.sound.SoundTool.channelOne2Tow;
 
 /**
  * Created by alan on 6/12/15.
@@ -18,26 +18,26 @@ public class HarmonicsGeneration {
     }
 
     /**
-     *
+     * generate pure sound.
      * @param freq
      * @param sec
      * @param db
      * @param order
+     * @param channel
      * @return
      */
-    public short[] generate(int freq, int sec, int db, int order) {
+    public short[] generate(int freq, int sec, int db, int order, int channel) {
+
         PureToneGeneration pureToneGeneration = new PureToneGeneration(sampleRate);
         short[] soundVector = new short[PureToneGeneration.pureToneExpectedLength(sampleRate, sec)];
         int tempFreq = freq;
-
-        Log.d("HarmonicsGeneration", "in generate. db: " + db);
 
         if (order <= 0) {
             return soundVector;
         }
 
         for (int i = 0; i < order; i++) {
-            Log.d("HarmonicsGeneration", "in generate. tempFreq: " + tempFreq);
+            //Log.d("HarmonicsGeneration", "in generate. tempFreq: " + tempFreq);
             if (tempFreq > 7000) {
                 break;
             }
@@ -59,10 +59,12 @@ public class HarmonicsGeneration {
             tempFreq += tempFreq;
         }
 
-        return soundVector;
+        if (channel == 1) {
+            return soundVector;
+        } else if (channel == 2) {
+            return channelOne2Tow(soundVector);
+        } else {  // force others as 1 channel.
+            return soundVector;
+        }
     }
-
-    /*
-     * add multi channels function?
-     * */
 }
