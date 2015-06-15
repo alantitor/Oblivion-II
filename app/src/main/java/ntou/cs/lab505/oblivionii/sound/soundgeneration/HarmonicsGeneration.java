@@ -1,6 +1,6 @@
 package ntou.cs.lab505.oblivionii.sound.soundgeneration;
 
-import static ntou.cs.lab505.oblivionii.sound.SoundTool.channelOne2Tow;
+import static ntou.cs.lab505.oblivionii.sound.SoundTool.channelOne2Two;
 
 /**
  * Created by alan on 6/12/15.
@@ -59,10 +59,12 @@ public class HarmonicsGeneration {
             tempFreq += tempFreq;
         }
 
+
+        // process channel
         if (channel == 1) {
             return soundVector;
         } else if (channel == 2) {
-            return channelOne2Tow(soundVector);
+            return channelOne2Two(soundVector);
         } else {  // force others as 1 channel.
             return soundVector;
         }

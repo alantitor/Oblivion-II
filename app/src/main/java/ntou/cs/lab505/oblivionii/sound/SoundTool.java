@@ -28,7 +28,7 @@ public class SoundTool {
      * @param soundVector
      * @return
      */
-    public static short[] channelOne2Tow(short[] soundVector) {
+    public static short[] channelOne2Two(short[] soundVector) {
 
         short[] outputVector = new short[soundVector.length * 2];
 

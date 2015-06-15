@@ -33,7 +33,7 @@
             android:id="@+id/title_activity_logo"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:textSize="26dp"
+            android:textSize="24dp"
             android:textColor="#333"/>
     </RelativeLayout>
 
@@ -49,8 +49,8 @@
             android:text="@string/copyright_activity_logo"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:textSize="16dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="18dp"
             android:textColor="#333"/>
     </RelativeLayout>
 

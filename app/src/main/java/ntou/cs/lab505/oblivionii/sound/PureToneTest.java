@@ -98,6 +98,7 @@ public class PureToneTest extends Service {
 
     public void runTest() {
         //Log.d("PureToneTest", "in runTest. value: " + valueOutput);
+
         // check device type.  and check sample rate
 
         // initial object
@@ -106,7 +107,7 @@ public class PureToneTest extends Service {
 
 
         // generate sound.
-        originSoundVector = harmonicsGeneration.generate(valueFreq, valueSec, valueDb, valueHarm, valueChannel);
+        originSoundVector = harmonicsGeneration.generate(valueFreq, valueSec, valueDb, valueHarm, 1);
         saveVectorToDataFile(originSoundVector, "origin");
         /**
          * check soundVector correctness.
@@ -123,19 +124,19 @@ public class PureToneTest extends Service {
 
 
         // pipe sound.
-        pureToneQueue.add(originSoundVector);
+        //pureToneQueue.add(originSoundVector);
 
-        frequencyShift.setInputDataQueue(pureToneQueue);
-        frequencyShift.setOutputDataQueue(freqShiftQueue);
+        //frequencyShift.setInputDataQueue(pureToneQueue);
+        //frequencyShift.setOutputDataQueue(freqShiftQueue);
 
 
         // threads start.
-        frequencyShift.threadStart();
+        //frequencyShift.threadStart();
 
         // thread stop????????
         // get thread broadcast.
 
-        frequencyShift.threadStop();
+        //frequencyShift.threadStop();
     }
 
     /**
@@ -145,6 +146,11 @@ public class PureToneTest extends Service {
     public short[] getOriginTimeDomainVector() {
         short[] temp = null;
         return temp;
+
+        /**
+         * wait for coding.
+         */
+
     }
 
     private void saveVectorToDataFile(short[] data, String fileName) {
