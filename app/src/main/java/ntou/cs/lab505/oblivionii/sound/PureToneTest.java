@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,7 +13,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
+import ntou.cs.lab505.oblivionii.sound.filterbank.FilterBank;
 import ntou.cs.lab505.oblivionii.sound.frequencyshift.FrequencyShift;
+import ntou.cs.lab505.oblivionii.sound.gain.Gain;
 import ntou.cs.lab505.oblivionii.sound.soundgeneration.HarmonicsGeneration;
 
 /**
@@ -34,15 +38,16 @@ public class PureToneTest extends Service {
     int sampleRate = 16000;
     // sound vector
     short[] originSoundVector;
-    short[] travelSoundVector;
     // function objects
     HarmonicsGeneration harmonicsGeneration;
     FrequencyShift frequencyShift;
+    FilterBank filterBank;
+    Gain gain;
     // data queues.
-    LinkedBlockingQueue<short[]> pureToneQueue = new LinkedBlockingQueue<short[]>();
-    LinkedBlockingQueue<short[]> freqShiftQueue = new LinkedBlockingQueue<short[]>();
-    //LinkedBlockingQueue<short[][]> filterBankQueue = new LinkedBlockingQueue<short[][]>();
-
+    LinkedBlockingQueue<SoundVectorUnit> pureToneQueue = new LinkedBlockingQueue<>();
+    LinkedBlockingQueue<SoundVectorUnit> freqShiftQueue = new LinkedBlockingQueue<>();
+    LinkedBlockingQueue<SoundVectorUnit[]> filterBankQueue = new LinkedBlockingQueue<>();
+    LinkedBlockingQueue<SoundVectorUnit> gainQueue = new LinkedBlockingQueue<>();
 
 
     public class PureToneTestBinder extends Binder {
@@ -63,6 +68,10 @@ public class PureToneTest extends Service {
     public void onDestroy() {
         //Log.d("PureToneTest", "in onDestroy.");
         super.onDestroy();
+        if (frequencyShift.threadState()) {
+            Log.d("PureToneTest", "in onDestroy. stop frequencyShift thread.");
+            frequencyShift.threadStop();
+        }
     }
 
     @Override
@@ -97,46 +106,59 @@ public class PureToneTest extends Service {
     }
 
     public void runTest() {
-        //Log.d("PureToneTest", "in runTest. value: " + valueOutput);
 
         // check device type.  and check sample rate
 
         // initial object
         harmonicsGeneration = new HarmonicsGeneration(sampleRate);
         frequencyShift = new FrequencyShift(sampleRate, 1, valueSemitone, 0, 0);
+        filterBank = new FilterBank(sampleRate, valueBcLow, valueBcHigh);
+        gain = new Gain(sampleRate, valueGain, valueGain, valueGain);
 
 
-        // generate sound.
-        originSoundVector = harmonicsGeneration.generate(valueFreq, valueSec, valueDb, valueHarm, 1);
-        saveVectorToDataFile(originSoundVector, "origin");
         /**
-         * check soundVector correctness.
+         * algorithm:
+         *  (1) generate pure tone.
+         *  (2) shift frequency.
+         *  (3) filter bank.
+         *  (4) gain bands.
+         *  (5) output sound.
          */
 
 
-        // shift sound frequency.
-
-        // filter sound.
-
-        // gain sound.
-
-        // output sound.
-
+        // generate sound.
+        originSoundVector = harmonicsGeneration.generate(valueFreq, valueSec, valueDb, valueHarm);
+        Log.d("PureToneTest", "in runTest. originSoundVector length: " + originSoundVector.length);
+        saveVectorToDataFile(originSoundVector, "origin");
+        SoundVectorUnit soundVectorUnit = new SoundVectorUnit(originSoundVector);
+        Log.d("PureToneTest", "in runTest. soundVectorUnit length: " + soundVectorUnit.getVectorLength());
 
         // pipe sound.
-        //pureToneQueue.add(originSoundVector);
-
-        //frequencyShift.setInputDataQueue(pureToneQueue);
-        //frequencyShift.setOutputDataQueue(freqShiftQueue);
+        pureToneQueue.add(soundVectorUnit);
+        frequencyShift.setInputDataQueue(pureToneQueue);
+        frequencyShift.setOutputDataQueue(freqShiftQueue);
+        filterBank.setInputDataQueue(freqShiftQueue);
+        filterBank.setOutputDataQueue(filterBankQueue);
+        gain.setInputDataQueue(filterBankQueue);
+        gain.setOutputDataQueue(gainQueue);
 
 
         // threads start.
-        //frequencyShift.threadStart();
+        frequencyShift.threadStart();
+        filterBank.threadStart();
+        gain.threadStart();
 
-        // thread stop????????
-        // get thread broadcast.
 
-        //frequencyShift.threadStop();
+        try {
+            Thread.sleep(valueSec * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        frequencyShift.threadStop();
+        filterBank.threadStop();
+        gain.threadStop();
     }
 
     /**

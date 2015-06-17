@@ -4,14 +4,16 @@ import android.util.Log;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
+
 /**
  * Created by alan on 6/12/15.
  */
 public class FrequencyShift extends Thread {
 
     private boolean threadState;  // denote thread state.
-    private LinkedBlockingQueue<short[]> inputDataQueue;
-    private LinkedBlockingQueue<short[]> outputDataQueue;
+    private LinkedBlockingQueue<SoundVectorUnit> inputDataQueue;
+    private LinkedBlockingQueue<SoundVectorUnit> outputDataQueue;
 
     private JNISoundTouch soundtouch = new JNISoundTouch();  // sound process object
     private int sampleRate;
@@ -19,6 +21,8 @@ public class FrequencyShift extends Thread {
     private int pitchSemiTones;
     private float rateChange;
     private float tempoChange;
+    private long startTime;
+    private long stopTime;
 
     /**
      * constructor
@@ -43,7 +47,7 @@ public class FrequencyShift extends Thread {
      * set data queue.  this queue is the source for processing.
      * @param inputDataQueue
      */
-    public void setInputDataQueue(LinkedBlockingQueue<short[]> inputDataQueue) {
+    public void setInputDataQueue(LinkedBlockingQueue<SoundVectorUnit> inputDataQueue) {
         this.inputDataQueue = inputDataQueue;
     }
 
@@ -51,7 +55,7 @@ public class FrequencyShift extends Thread {
      * set data queue.  this queue used to save processed data.
      * @param outputDataQueue
      */
-    public void setOutputDataQueue(LinkedBlockingQueue<short[]> outputDataQueue) {
+    public void setOutputDataQueue(LinkedBlockingQueue<SoundVectorUnit> outputDataQueue) {
         this.outputDataQueue = outputDataQueue;
     }
 
@@ -87,6 +91,14 @@ public class FrequencyShift extends Thread {
         this.interrupt();
     }
 
+    /**
+     * check thread state.
+     * @return
+     */
+    public boolean threadState() {
+        return this.threadState;
+    }
+
     public void run() {
         Log.d("FrequencyShift", "in run. process start.");
 
@@ -97,26 +109,60 @@ public class FrequencyShift extends Thread {
         soundtouch.setRateChange(rateChange);  // Changes both tempo and pitch together as if a vinyl disc was played at different RPM rate.
         soundtouch.setTempoChange(tempoChange);  // Changes the sound to play at faster or slower tempo than originally without affecting the sound pitch.
 
-        short[] tempBuff;
-        short[] tempBuff2;
+        SoundVectorUnit inputUnit = null;
+        SoundVectorUnit outputUnit = new SoundVectorUnit(null);
 
-        try {
-            while (threadState) {
-                tempBuff = inputDataQueue.take();
 
-                if (tempBuff != null) {
-                    soundtouch.putSamples(tempBuff, tempBuff.length);
-
-                    do {
-                        tempBuff2 = soundtouch.receiveSamples();
-                        outputDataQueue.add(tempBuff2);
-                    } while (tempBuff2.length > 0);
-                }
+        while (threadState) {
+            //this.startTime = System.currentTimeMillis();
+            this.startTime = System.nanoTime();
+            // take data from queue.
+            try {
+                inputUnit = inputDataQueue.take();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch (Throwable e) {
-            // do nothing
+
+            if (inputUnit == null) {
+                continue;
+            }
+            if (inputUnit.getVectorLength() == 0) {
+                continue;
+            }
+            Log.d("FrequencyShift", "in run. inputUnit length: " + inputUnit.getVectorLength());
+
+
+            if (inputUnit.getLeftChannel() != null) {
+                Log.d("Frequency", "in runTest. get data.");
+                soundtouch.putSamples(inputUnit.getLeftChannel(), inputUnit.getLeftChannel().length);
+
+                do {
+                    outputUnit.setLeftChannel(soundtouch.receiveSamples());
+                    Log.d("FrequencyShift", "in run. outputUnit length: " + outputUnit.getVectorLength());
+
+                    // stop some time.
+                    // close it.
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //outputDataQueue.put(outputUnit);
+                    outputDataQueue.add(outputUnit);
+                } while (outputUnit.getLeftChannel().length > 0);
+            }
+
+            this.stopTime = System.nanoTime();
+            Log.d("FrequencyShift", "in run. time: " + (double)(stopTime - startTime) / 1000000.0);
         }
 
+
         Log.d("FrequencyShift", "in run. process stop.");
+    }
+
+    public long usedTime() {
+        return (stopTime - startTime);
     }
 }

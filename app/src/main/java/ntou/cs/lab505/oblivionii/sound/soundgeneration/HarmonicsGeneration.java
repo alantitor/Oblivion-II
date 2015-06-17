@@ -1,7 +1,5 @@
 package ntou.cs.lab505.oblivionii.sound.soundgeneration;
 
-import static ntou.cs.lab505.oblivionii.sound.SoundTool.channelOne2Two;
-
 /**
  * Created by alan on 6/12/15.
  */
@@ -23,10 +21,9 @@ public class HarmonicsGeneration {
      * @param sec
      * @param db
      * @param order
-     * @param channel
      * @return
      */
-    public short[] generate(int freq, int sec, int db, int order, int channel) {
+    public short[] generate(int freq, int sec, int db, int order) {
 
         PureToneGeneration pureToneGeneration = new PureToneGeneration(sampleRate);
         short[] soundVector = new short[PureToneGeneration.pureToneExpectedLength(sampleRate, sec)];
@@ -59,14 +56,6 @@ public class HarmonicsGeneration {
             tempFreq += tempFreq;
         }
 
-
-        // process channel
-        if (channel == 1) {
-            return soundVector;
-        } else if (channel == 2) {
-            return channelOne2Two(soundVector);
-        } else {  // force others as 1 channel.
-            return soundVector;
-        }
+        return soundVector;
     }
 }
