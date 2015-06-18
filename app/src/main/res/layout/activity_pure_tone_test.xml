@@ -246,7 +246,7 @@
                             android:layout_width="70dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:inputType="number"
+                            android:inputType="numberSigned"
                             android:id="@+id/et_semitone_activity_pure_tone_test"
                             android:text="0"/>
 
@@ -270,7 +270,7 @@
                             android:layout_width="70dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:inputType="number"
+                            android:inputType="numberSigned"
                             android:id="@+id/et_gain_activity_pure_tone_test"
                             android:text="0"/>
 

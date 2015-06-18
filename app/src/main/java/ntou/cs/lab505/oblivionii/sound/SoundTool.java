@@ -1,5 +1,12 @@
 package ntou.cs.lab505.oblivionii.sound;
 
+import android.os.Environment;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
 
 /**
@@ -97,5 +104,26 @@ public class SoundTool {
         sum = 10 * Math.log10(sum / data.length);
 
         return sum;
+    }
+
+    public static void saveVectorToDataFile(short[] data, String fileName) {
+        File file = new File(Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName + ".txt");
+        FileOutputStream fOut;
+        OutputStreamWriter fWriter;
+
+        if (data == null) {
+            return ;
+        }
+
+        try {
+            file.createNewFile();
+            fOut = new FileOutputStream(file);
+            fWriter = new OutputStreamWriter(fOut);
+            for (int i = 0; i < data.length; i++) {
+                fWriter.append(data[i] + ",");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

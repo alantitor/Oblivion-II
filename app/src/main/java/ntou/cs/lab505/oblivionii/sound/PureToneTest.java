@@ -3,14 +3,9 @@ package ntou.cs.lab505.oblivionii.sound;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
@@ -18,6 +13,8 @@ import ntou.cs.lab505.oblivionii.sound.filterbank.FilterBank;
 import ntou.cs.lab505.oblivionii.sound.frequencyshift.FrequencyShift;
 import ntou.cs.lab505.oblivionii.sound.gain.Gain;
 import ntou.cs.lab505.oblivionii.sound.soundgeneration.HarmonicsGeneration;
+
+import static ntou.cs.lab505.oblivionii.sound.SoundTool.saveVectorToDataFile;
 
 /**
  * Created by alan on 6/10/15.
@@ -68,10 +65,6 @@ public class PureToneTest extends Service {
     public void onDestroy() {
         //Log.d("PureToneTest", "in onDestroy.");
         super.onDestroy();
-        if (frequencyShift.threadState()) {
-            Log.d("PureToneTest", "in onDestroy. stop frequencyShift thread.");
-            frequencyShift.threadStop();
-        }
     }
 
     @Override
@@ -113,7 +106,13 @@ public class PureToneTest extends Service {
         harmonicsGeneration = new HarmonicsGeneration(sampleRate);
         frequencyShift = new FrequencyShift(sampleRate, 1, valueSemitone, 0, 0);
         filterBank = new FilterBank(sampleRate, valueBcLow, valueBcHigh);
-        gain = new Gain(sampleRate, valueGain, valueGain, valueGain);
+
+        //BandSetUnit[ ] bandSetUnit = new BandSetUnit[2];
+        //bandSetUnit[0] = new BandSetUnit(200, 400);
+        //bandSetUnit[1] = new BandSetUnit(500, 800);
+        //filterBank = new FilterBank(sampleRate, bandSetUnit);
+
+        //gain = new Gain(sampleRate, valueGain, valueGain, valueGain);
 
 
         /**
@@ -131,34 +130,37 @@ public class PureToneTest extends Service {
         Log.d("PureToneTest", "in runTest. originSoundVector length: " + originSoundVector.length);
         saveVectorToDataFile(originSoundVector, "origin");
         SoundVectorUnit soundVectorUnit = new SoundVectorUnit(originSoundVector);
-        Log.d("PureToneTest", "in runTest. soundVectorUnit length: " + soundVectorUnit.getVectorLength());
+        //Log.d("PureToneTest", "in runTest. soundVectorUnit length: " + soundVectorUnit.getVectorLength());
 
         // pipe sound.
         pureToneQueue.add(soundVectorUnit);
-        frequencyShift.setInputDataQueue(pureToneQueue);
-        frequencyShift.setOutputDataQueue(freqShiftQueue);
-        filterBank.setInputDataQueue(freqShiftQueue);
+        //frequencyShift.setInputDataQueue(pureToneQueue);
+        //frequencyShift.setOutputDataQueue(freqShiftQueue);
+
+        filterBank.setInputDataQueue(pureToneQueue);
         filterBank.setOutputDataQueue(filterBankQueue);
-        gain.setInputDataQueue(filterBankQueue);
-        gain.setOutputDataQueue(gainQueue);
+
+        //gain.setInputDataQueue(filterBankQueue);
+        //gain.setOutputDataQueue(gainQueue);
 
 
         // threads start.
-        frequencyShift.threadStart();
+        //frequencyShift.threadStart();
         filterBank.threadStart();
-        gain.threadStart();
+        //gain.threadStart();
 
 
         try {
-            Thread.sleep(valueSec * 1000);
+            //Thread.sleep(valueSec * 1000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
 
-        frequencyShift.threadStop();
+        //frequencyShift.threadStop();
         filterBank.threadStop();
-        gain.threadStop();
+        //gain.threadStop();
     }
 
     /**
@@ -175,24 +177,5 @@ public class PureToneTest extends Service {
 
     }
 
-    private void saveVectorToDataFile(short[] data, String fileName) {
-        File file = new File(Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName + ".txt");
-        FileOutputStream fOut;
-        OutputStreamWriter fWriter;
 
-        if (data == null) {
-            return ;
-        }
-
-        try {
-            file.createNewFile();
-            fOut = new FileOutputStream(file);
-            fWriter = new OutputStreamWriter(fOut);
-            for (int i = 0; i < data.length; i++) {
-                fWriter.append(data[i] + ",");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

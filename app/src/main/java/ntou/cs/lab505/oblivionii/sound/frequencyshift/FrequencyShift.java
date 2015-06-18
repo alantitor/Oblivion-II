@@ -112,16 +112,12 @@ public class FrequencyShift extends Thread {
         SoundVectorUnit inputUnit = null;
         SoundVectorUnit outputUnit = new SoundVectorUnit(null);
 
-
+        int count = 0;
         while (threadState) {
             //this.startTime = System.currentTimeMillis();
             this.startTime = System.nanoTime();
             // take data from queue.
-            try {
-                inputUnit = inputDataQueue.take();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            inputUnit = inputDataQueue.poll();
 
             if (inputUnit == null) {
                 continue;
@@ -143,11 +139,10 @@ public class FrequencyShift extends Thread {
                     // stop some time.
                     // close it.
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
 
                     //outputDataQueue.put(outputUnit);
                     outputDataQueue.add(outputUnit);
