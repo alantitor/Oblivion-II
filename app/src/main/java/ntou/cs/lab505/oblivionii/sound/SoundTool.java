@@ -1,6 +1,7 @@
 package ntou.cs.lab505.oblivionii.sound;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,10 +42,10 @@ public class SoundTool {
      * @return
      */
     public static SoundVectorUnit channelMix(SoundVectorUnit[] soundVectorUnits) {
-
+        Log.d("SoundTool", "in channelMix. band number: " + soundVectorUnits.length);
         SoundVectorUnit outputVector = null;
 
-        if (soundVectorUnits[0].getChannelNumber() == 0) {  // one channel.
+        if (soundVectorUnits[0].getChannelNumber() == 1) {  // one channel.
             short[] leftVector = new short[soundVectorUnits[0].getVectorLength()];
             int temp = 0;
 

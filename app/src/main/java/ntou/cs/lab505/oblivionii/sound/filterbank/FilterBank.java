@@ -8,8 +8,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import ntou.cs.lab505.oblivionii.datastructure.BandSetUnit;
 import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
 
-import static ntou.cs.lab505.oblivionii.sound.SoundTool.saveVectorToDataFile;
-
 public class FilterBank extends Thread {
 
     private boolean threadState = false;
@@ -138,9 +136,9 @@ public class FilterBank extends Thread {
                 for (int i = 0; i < this.filterBankNumber; i++) {
                     outputUnit[i] = new SoundVectorUnit(iirBandsLeft.get(i).process(inputUnit.getLeftChannel().clone()));
                     //Log.d("FilterBank", "in runTest. outputUnit length: " + outputUnit[i].getVectorLength());
-                    short[] t = outputUnit[i].getLeftChannel();
-                    Log.d("debug", "value: " + t[1000] + t[1001] + t[1002] + t[1003]);
-                    saveVectorToDataFile(outputUnit[i].getLeftChannel(), "filter" + i);
+                    //short[] t = outputUnit[i].getLeftChannel();
+                    //Log.d("debug", "value: " + t[1000] + t[1001] + t[1002] + t[1003]);
+                    //saveVectorToDataFile(outputUnit[i].getLeftChannel(), "filter" + i);
                 }
             } else if (this.channelNumber == 2) {
                 for (int i = 0; i < this.filterBankNumber; i++) {

@@ -9,6 +9,7 @@ import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
 
 import static ntou.cs.lab505.oblivionii.sound.SoundTool.calculateDb;
 import static ntou.cs.lab505.oblivionii.sound.SoundTool.channelMix;
+import static ntou.cs.lab505.oblivionii.sound.SoundTool.saveVectorToDataFile;
 
 /**
  * Created by alan on 6/10/15.
@@ -89,28 +90,31 @@ public class Gain extends Thread {
         SoundVectorUnit outputUnit = null;
 
 
+        int count = 0;
         while (threadState) {
-            try {
-                inputUnit = inputDataQueue.take();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            inputUnit = inputDataQueue.poll();
 
             if (inputUnit == null) {
+                continue;
+            }
+            if (inputUnit.length == 0) {
                 continue;
             }
             Log.d("Gain", "in run. inputUnit length: " + inputUnit[0].getVectorLength());
 
 
-
             if (this.channelNumber == 1) {
                 // extra bands.
                 for (int i = 0; i < this.bandNumber; i++) {
-                    inputUnit[i].setLeftChannel(autoGain(inputUnit[i].getLeftChannel(), i, 0));
+                    Log.d("Gain", "in run. before gain, db: " + calculateDb(inputUnit[i].getLeftChannel()));
+                    inputUnit[i] = new SoundVectorUnit(autoGain(inputUnit[i].getLeftChannel(), i, 0));
+                    Log.d("Gain", "in run. after gain, db: " + calculateDb(inputUnit[i].getLeftChannel()));
+                    saveVectorToDataFile(inputUnit[i].getLeftChannel(), "gain" + (count));
                 }
 
                 // mix bands.
                 outputUnit = channelMix(inputUnit);
+                saveVectorToDataFile(outputUnit.getLeftChannel(), "mix" + (count++));
             } else if (this.channelNumber == 2) {
                 for (int i = 0; i < this.bandNumber; i++) {
                     inputUnit[i].setLeftChannel(autoGain(inputUnit[i].getLeftChannel(), i, 0));
