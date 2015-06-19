@@ -45,6 +45,7 @@ public class PureToneTest extends Service {
     LinkedBlockingQueue<SoundVectorUnit> freqShiftQueue = new LinkedBlockingQueue<>();
     LinkedBlockingQueue<SoundVectorUnit[]> filterBankQueue = new LinkedBlockingQueue<>();
     LinkedBlockingQueue<SoundVectorUnit> gainQueue = new LinkedBlockingQueue<>();
+    LinkedBlockingQueue<SoundVectorUnit[]> tempQueue = new LinkedBlockingQueue<>();
 
 
     public class PureToneTestBinder extends Binder {
@@ -107,12 +108,15 @@ public class PureToneTest extends Service {
         frequencyShift = new FrequencyShift(sampleRate, 1, valueSemitone, 0, 0);
         filterBank = new FilterBank(sampleRate, valueBcLow, valueBcHigh);
 
-        //BandSetUnit[ ] bandSetUnit = new BandSetUnit[2];
-        //bandSetUnit[0] = new BandSetUnit(200, 400);
-        //bandSetUnit[1] = new BandSetUnit(500, 800);
+        //BandSetUnit[ ] bandSetUnit = new BandSetUnit[5];
+        //bandSetUnit[0] = new BandSetUnit(143, 280);
+        //bandSetUnit[1] = new BandSetUnit(281, 561);
+        //bandSetUnit[2] = new BandSetUnit(561, 1120);
+        //bandSetUnit[3] = new BandSetUnit(1110, 2240);
+        //bandSetUnit[4] = new BandSetUnit(2230, 3540);
         //filterBank = new FilterBank(sampleRate, bandSetUnit);
 
-        //gain = new Gain(sampleRate, valueGain, valueGain, valueGain);
+        gain = new Gain(sampleRate, valueGain, valueGain, valueGain);
 
 
         /**
@@ -129,25 +133,28 @@ public class PureToneTest extends Service {
         originSoundVector = harmonicsGeneration.generate(valueFreq, valueSec, valueDb, valueHarm);
         Log.d("PureToneTest", "in runTest. originSoundVector length: " + originSoundVector.length);
         saveVectorToDataFile(originSoundVector, "origin");
-        SoundVectorUnit soundVectorUnit = new SoundVectorUnit(originSoundVector);
+        //SoundVectorUnit soundVectorUnit = new SoundVectorUnit(originSoundVector);
         //Log.d("PureToneTest", "in runTest. soundVectorUnit length: " + soundVectorUnit.getVectorLength());
 
         // pipe sound.
-        pureToneQueue.add(soundVectorUnit);
+        //pureToneQueue.add(soundVectorUnit);
         //frequencyShift.setInputDataQueue(pureToneQueue);
         //frequencyShift.setOutputDataQueue(freqShiftQueue);
 
-        filterBank.setInputDataQueue(pureToneQueue);
-        filterBank.setOutputDataQueue(filterBankQueue);
+        //filterBank.setInputDataQueue(pureToneQueue);
+        //filterBank.setOutputDataQueue(filterBankQueue);
 
-        //gain.setInputDataQueue(filterBankQueue);
-        //gain.setOutputDataQueue(gainQueue);
+        SoundVectorUnit[] soundVectorUnit= new SoundVectorUnit[1];
+        soundVectorUnit[0] = new SoundVectorUnit(originSoundVector);
+        tempQueue.add(soundVectorUnit);
+        gain.setInputDataQueue(tempQueue);
+        gain.setOutputDataQueue(gainQueue);
 
 
         // threads start.
         //frequencyShift.threadStart();
-        filterBank.threadStart();
-        //gain.threadStart();
+        //filterBank.threadStart();
+        gain.threadStart();
 
 
         try {
@@ -159,8 +166,8 @@ public class PureToneTest extends Service {
 
 
         //frequencyShift.threadStop();
-        filterBank.threadStop();
-        //gain.threadStop();
+        //filterBank.threadStop();
+        gain.threadStop();
     }
 
     /**
