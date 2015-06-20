@@ -23,7 +23,15 @@ public class SoundTool {
      */
     public static short[] channelTwo2One(short[] leftChannel, short[] rightChannel) {
 
-        return null;
+        short[] outputVector = new short[leftChannel.length * 2];
+
+        // data: LRLRLRLR...
+        for (int i = 0; i < leftChannel.length; i++) {
+            outputVector[i * 2] = leftChannel[i];
+            outputVector[i * 2 + 1] = rightChannel[i];
+        }
+
+        return outputVector;
     }
 
     /**

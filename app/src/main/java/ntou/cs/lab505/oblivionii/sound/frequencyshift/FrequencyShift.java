@@ -153,7 +153,6 @@ public class FrequencyShift extends Thread {
             Log.d("FrequencyShift", "in run. time: " + (double)(stopTime - startTime) / 1000000.0);
         }
 
-
         Log.d("FrequencyShift", "in run. process stop.");
     }
 

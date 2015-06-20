@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
@@ -35,7 +36,8 @@ public class PureToneTestActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pure_tone_test);
-
+        // allow volume buttons.
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
         // get objects.
         ETFreq = (EditText) findViewById(R.id.et_freq_activity_pure_tone_test);
         ETDb = (EditText) findViewById(R.id.et_db_activity_pure_tone_test);

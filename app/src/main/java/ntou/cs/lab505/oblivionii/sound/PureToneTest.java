@@ -13,8 +13,10 @@ import ntou.cs.lab505.oblivionii.sound.filterbank.FilterBank;
 import ntou.cs.lab505.oblivionii.sound.frequencyshift.FrequencyShift;
 import ntou.cs.lab505.oblivionii.sound.gain.Gain;
 import ntou.cs.lab505.oblivionii.sound.soundgeneration.HarmonicsGeneration;
+import ntou.cs.lab505.oblivionii.stream.SoundOutputPool;
 
 import static ntou.cs.lab505.oblivionii.sound.SoundTool.saveVectorToDataFile;
+import static ntou.cs.lab505.oblivionii.stream.device.Speaker.checkOutputDeviceState;
 
 /**
  * Created by alan on 6/10/15.
@@ -40,12 +42,13 @@ public class PureToneTest extends Service {
     FrequencyShift frequencyShift;
     FilterBank filterBank;
     Gain gain;
+    SoundOutputPool soundOutputPool;
     // data queues.
     LinkedBlockingQueue<SoundVectorUnit> pureToneQueue = new LinkedBlockingQueue<>();
     LinkedBlockingQueue<SoundVectorUnit> freqShiftQueue = new LinkedBlockingQueue<>();
     LinkedBlockingQueue<SoundVectorUnit[]> filterBankQueue = new LinkedBlockingQueue<>();
     LinkedBlockingQueue<SoundVectorUnit> gainQueue = new LinkedBlockingQueue<>();
-    LinkedBlockingQueue<SoundVectorUnit[]> tempQueue = new LinkedBlockingQueue<>();
+    LinkedBlockingQueue<SoundVectorUnit> tempQueue = new LinkedBlockingQueue<>();
 
 
     public class PureToneTestBinder extends Binder {
@@ -101,7 +104,10 @@ public class PureToneTest extends Service {
 
     public void runTest() {
 
-        // check device type.  and check sample rate
+        // check device type. check sample rate. check channel number.
+        Log.d("PureToneTest", "in runtest. state: " + checkOutputDeviceState(0));
+        Log.d("PureToneTest", "in runtest. state: " + checkOutputDeviceState(1));
+        Log.d("PureToneTest", "in runtest. state: " + checkOutputDeviceState(2));
 
         // initial object
         harmonicsGeneration = new HarmonicsGeneration(sampleRate);
@@ -116,7 +122,9 @@ public class PureToneTest extends Service {
         //bandSetUnit[4] = new BandSetUnit(2230, 3540);
         //filterBank = new FilterBank(sampleRate, bandSetUnit);
 
-        gain = new Gain(sampleRate, valueGain, valueGain, valueGain);
+        gain = new Gain(sampleRate, valueGain, valueGain, valueGain);  // 40 dB value. 60 dB value. 80 dB value.
+
+        soundOutputPool = new SoundOutputPool(sampleRate, 1, valueOutput);
 
 
         /**
@@ -133,28 +141,27 @@ public class PureToneTest extends Service {
         originSoundVector = harmonicsGeneration.generate(valueFreq, valueSec, valueDb, valueHarm);
         Log.d("PureToneTest", "in runTest. originSoundVector length: " + originSoundVector.length);
         saveVectorToDataFile(originSoundVector, "origin");
-        //SoundVectorUnit soundVectorUnit = new SoundVectorUnit(originSoundVector);
+        SoundVectorUnit soundVectorUnit = new SoundVectorUnit(originSoundVector);
         //Log.d("PureToneTest", "in runTest. soundVectorUnit length: " + soundVectorUnit.getVectorLength());
 
         // pipe sound.
-        //pureToneQueue.add(soundVectorUnit);
+        pureToneQueue.add(soundVectorUnit);
         //frequencyShift.setInputDataQueue(pureToneQueue);
         //frequencyShift.setOutputDataQueue(freqShiftQueue);
 
         //filterBank.setInputDataQueue(pureToneQueue);
         //filterBank.setOutputDataQueue(filterBankQueue);
 
-        SoundVectorUnit[] soundVectorUnit= new SoundVectorUnit[1];
-        soundVectorUnit[0] = new SoundVectorUnit(originSoundVector);
-        tempQueue.add(soundVectorUnit);
-        gain.setInputDataQueue(tempQueue);
-        gain.setOutputDataQueue(gainQueue);
+        //gain.setInputDataQueue(tempQueue);
+        //gain.setOutputDataQueue(gainQueue);
 
+        soundOutputPool.setInputDataQueue(pureToneQueue);
 
         // threads start.
-        //frequencyShift.threadStart();
+        //frequencyShift.threadStat();
         //filterBank.threadStart();
-        gain.threadStart();
+        //gain.threadStart();
+        soundOutputPool.threadStart();
 
 
         try {
@@ -167,7 +174,8 @@ public class PureToneTest extends Service {
 
         //frequencyShift.threadStop();
         //filterBank.threadStop();
-        gain.threadStop();
+        //gain.threadStop();
+        soundOutputPool.threadStop();
     }
 
     /**
@@ -183,6 +191,4 @@ public class PureToneTest extends Service {
          */
 
     }
-
-
 }

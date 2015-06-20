@@ -109,12 +109,12 @@ public class Gain extends Thread {
                     Log.d("Gain", "in run. before gain, db: " + calculateDb(inputUnit[i].getLeftChannel()));
                     inputUnit[i] = new SoundVectorUnit(autoGain(inputUnit[i].getLeftChannel(), i, 0));
                     Log.d("Gain", "in run. after gain, db: " + calculateDb(inputUnit[i].getLeftChannel()));
-                    saveVectorToDataFile(inputUnit[i].getLeftChannel(), "gain" + (count));
+                    //saveVectorToDataFile(inputUnit[i].getLeftChannel(), "gain" + (count));
                 }
 
                 // mix bands.
                 outputUnit = channelMix(inputUnit);
-                saveVectorToDataFile(outputUnit.getLeftChannel(), "mix" + (count++));
+                //saveVectorToDataFile(outputUnit.getLeftChannel(), "mix" + (count++));
             } else if (this.channelNumber == 2) {
                 for (int i = 0; i < this.bandNumber; i++) {
                     inputUnit[i].setLeftChannel(autoGain(inputUnit[i].getLeftChannel(), i, 0));

@@ -2,6 +2,7 @@ package ntou.cs.lab505.oblivionii.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +20,9 @@ public class ServiceActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
-
+        // allow volume buttons.
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        // get object.
         controlButton = (ImageView) findViewById(R.id.servicecontrol_activity_service);
     }
 
