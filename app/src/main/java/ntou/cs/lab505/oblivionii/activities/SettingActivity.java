@@ -16,15 +16,18 @@ public class SettingActivity extends Activity {
     }
 
     public void buttonIOSetting(View view) {
-
+        Intent intent = new Intent(this, IOSettingActivity.class);
+        startActivity(intent);
     }
 
     public void buttonFreqSetting(View view) {
-
+        Intent intent = new Intent(this, FreqSettingActivity.class);
+        startActivity(intent);
     }
 
     public void buttonBandSetting(View view) {
-
+        Intent intent = new Intent(this, BandSettingActivity.class);
+        startActivity(intent);
     }
 
     public void buttonPureToneTest(View view) {
@@ -33,18 +36,22 @@ public class SettingActivity extends Activity {
     }
 
     public void buttonAudiogramTest(View view) {
-
+        Intent intent = new Intent(this, AudiogramTestActivity.class);
+        startActivity(intent);
     }
 
-    public void buttonIntro(View view) {
-
+    public void buttonGuide(View view) {
+        Intent intent = new Intent(this, GuideActivity.class);
+        startActivity(intent);
     }
 
     public void buttonAbout(View view) {
-
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
     }
 
     public void buttonDatabase(View view) {
-
+        Intent intent = new Intent(this, DatabaseActivity.class);
+        startActivity(intent);
     }
 }

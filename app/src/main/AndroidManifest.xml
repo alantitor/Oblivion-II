@@ -36,7 +36,37 @@
             android:name=".activities.PureToneTestActivity"
             android:label="@string/title_activity_pure_tone_test" >
         </activity>
-        <service android:name=".sound.PureToneTest"/>
+
+        <service android:name=".sound.PureToneTest" />
+
+        <activity
+            android:name=".activities.IOSettingActivity"
+            android:label="@string/title_activity_iosetting" >
+        </activity>
+        <activity
+            android:name=".activities.FreqSettingActivity"
+            android:label="@string/title_activity_freq_setting" >
+        </activity>
+        <activity
+            android:name=".activities.BandSettingActivity"
+            android:label="@string/title_activity_band_setting" >
+        </activity>
+        <activity
+            android:name=".activities.AudiogramTestActivity"
+            android:label="@string/title_activity_audiogram_test" >
+        </activity>
+        <activity
+            android:name=".activities.GuideActivity"
+            android:label="@string/title_activity_guide" >
+        </activity>
+        <activity
+            android:name=".activities.AboutActivity"
+            android:label="@string/title_activity_about" >
+        </activity>
+        <activity
+            android:name=".activities.DatabaseActivity"
+            android:label="@string/title_activity_database" >
+        </activity>
     </application>
 
 </manifest>

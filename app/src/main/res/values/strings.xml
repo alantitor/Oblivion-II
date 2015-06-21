@@ -6,12 +6,24 @@
     <string name="title_activity_service">ServiceActivity</string>
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_activity_pure_tone_test">PureToneTestActivity</string>
+    <string name="title_activity_iosetting">IOSettingActivity</string>
+    <string name="title_activity_freq_setting">FreqSettingActivity</string>
+    <string name="title_activity_band_setting">BandSettingActivity</string>
+    <string name="title_activity_audiogram_test">AudiogramTestActivity</string>
+    <string name="title_activity_guide">GuideActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_database">DatabaseActivity</string>
     <!-- string of each activities -->
     <!-- string of logo activity -->
     <string name="copyright_activity_logo">© 2015 NTOU CS LAB505</string>
     <!-- string of service activity -->
     <string name="play_activity_service">PLAY</string>
     <string name="setting_activity_service">SETTING</string>
+
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
     <!-- string of setting activity -->
 
     <!-- other string -->

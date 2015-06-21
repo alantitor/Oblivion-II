@@ -56,7 +56,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="buttonIOSetting">
 
                     <ImageView
                         android:layout_width="30dp"
@@ -77,7 +79,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="buttonFreqSetting">
 
                     <ImageView
                         android:layout_width="30dp"
@@ -98,7 +102,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="buttonBandSetting">
 
                     <ImageView
                         android:layout_width="30dp"
@@ -166,7 +172,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="buttonAudiogramTest">
 
                     <ImageView
                         android:layout_width="30dp"
@@ -211,7 +219,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="buttonGuide">
 
                     <ImageView
                         android:layout_width="30dp"
@@ -232,7 +242,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="buttonAbout">
 
                     <ImageView
                         android:layout_width="30dp"
@@ -253,7 +265,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="buttonDatabase">
 
                     <ImageView
                         android:layout_width="30dp"
