@@ -35,7 +35,7 @@ public class HarmonicsGeneration {
 
         for (int i = 0; i < order; i++) {
             //Log.d("HarmonicsGeneration", "in generate. tempFreq: " + tempFreq);
-            if (tempFreq > 7000) {
+            if (tempFreq > ((sampleRate / 2) * 0.9)) {
                 break;
             }
 

@@ -6,6 +6,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
@@ -35,6 +36,7 @@ public class PureToneTest extends Service {
     int valueChannel = 0;
     int valueOutput = 0;
     int sampleRate = 16000;
+    int frameSize = 4000;
     // sound vector
     short[] originSoundVector;
     // function objects
@@ -103,6 +105,86 @@ public class PureToneTest extends Service {
     }
 
     public void runTest() {
+
+        // check device type. check sample rate. check channel number.
+
+
+        // initial object
+        harmonicsGeneration = new HarmonicsGeneration(sampleRate);
+        frequencyShift = new FrequencyShift(sampleRate, 1, valueSemitone, 0, 0);
+        filterBank = new FilterBank(sampleRate, valueBcLow, valueBcHigh);
+        gain = new Gain(sampleRate, valueGain, valueGain, valueGain);  // 40 dB value. 60 dB value. 80 dB value.
+        soundOutputPool = new SoundOutputPool(sampleRate, 2, valueChannel, valueOutput);
+
+
+        /**
+         * algorithm:
+         *  (1) generate pure tone.
+         *  (2) shift frequency.
+         *  (3) filter bank.
+         *  (4) gain bands.
+         *  (5) output sound.
+         */
+
+
+        // generate sound.
+        originSoundVector = harmonicsGeneration.generate(valueFreq, valueSec, valueDb, valueHarm);
+        //saveVectorToDataFile(originSoundVector, "origin");
+
+
+        // cut frame.
+        SoundVectorUnit soundVectorUnit = null;
+
+        if (originSoundVector.length < frameSize) {
+            soundVectorUnit = new SoundVectorUnit(originSoundVector);
+            pureToneQueue.add(soundVectorUnit);
+        } else {
+            int num = originSoundVector.length / frameSize;
+            if (originSoundVector.length % frameSize != 0) {
+                num++;
+            }
+
+            int start = 0;
+            for (int i = 0; i < num; i++) {
+                //soundVectorUnit = new SoundVectorUnit(Arrays.copyOfRange(originSoundVector, start, start + ));
+            }
+        }
+
+        // pipe sound.
+        //pureToneQueue.add(soundVectorUnit);
+
+        frequencyShift.setInputDataQueue(pureToneQueue);
+        frequencyShift.setOutputDataQueue(freqShiftQueue);
+
+        filterBank.setInputDataQueue(freqShiftQueue);
+        filterBank.setOutputDataQueue(filterBankQueue);
+
+        gain.setInputDataQueue(filterBankQueue);
+        gain.setOutputDataQueue(gainQueue);
+
+        soundOutputPool.setInputDataQueue(gainQueue);
+
+        // threads start.
+        frequencyShift.threadStart();
+        filterBank.threadStart();
+        gain.threadStart();
+        soundOutputPool.threadStart();
+
+
+        try {
+            Thread.sleep(valueSec * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        frequencyShift.threadStop();
+        filterBank.threadStop();
+        gain.threadStop();
+        soundOutputPool.threadStop();
+    }
+
+    public void runTestDebug() {
 
         // check device type. check sample rate. check channel number.
         Log.d("PureToneTest", "in runtest. state: " + checkOutputDeviceState(0));
