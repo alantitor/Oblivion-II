@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
+import ntou.cs.lab505.oblivionii.stream.device.Speaker;
 import ntou.cs.lab505.oblivionii.stream.device.WriteFile;
 
 import static ntou.cs.lab505.oblivionii.sound.SoundTool.channelTwo2One;
@@ -19,8 +20,10 @@ public class SoundOutputPool extends Thread {
 
     private int sampleRate;
     private int channelNumber;
+    private int lr;
     private int mode;
 
+    Speaker speaker;
     WriteFile writeFile;
 
 
@@ -28,16 +31,19 @@ public class SoundOutputPool extends Thread {
      *
      * @param samplerate
      * @param channelNumber
+     * @param lr
      * @param mode 0: speaker, 1: write to data file, 2: write to wmv file
      */
-    public SoundOutputPool(int samplerate, int channelNumber, int mode) {
+    public SoundOutputPool(int samplerate, int channelNumber, int lr, int mode) {
         this.sampleRate = samplerate;
         this.channelNumber = channelNumber;
+        this.lr = lr;
         this.mode = mode;
 
         // initial object.
         switch (mode) {
             case 0:
+                speaker = new Speaker(samplerate, channelNumber);
                 break;
             case 1:
                 writeFile = new WriteFile(0, "speaker");
@@ -91,6 +97,7 @@ public class SoundOutputPool extends Thread {
         // open output object.
         switch (mode) {
             case 0:
+                speaker.open();
                 break;
             case 1:
             case 2:
@@ -115,16 +122,29 @@ public class SoundOutputPool extends Thread {
             Log.d("SoundOutputPool", "in run. inputUnit length: " + inputUnit.getVectorLength());
 
 
+            // merge channel sound data.
             if (this.channelNumber == 1) {
                 outputDataVector = inputUnit.getLeftChannel();
             } else if (this.channelNumber == 2) {
-                outputDataVector = channelTwo2One(inputUnit.getLeftChannel(), inputUnit.getRightChannel());
+                if (inputUnit.getChannelNumber() == 1) {
+                    if (lr == 0) {  // only output left ear.
+                        Log.d("SoundOutputPool", "in run. left ear.");
+                        outputDataVector = channelTwo2One(inputUnit.getLeftChannel(), null);
+                    } else {  // only output right ear.
+                        Log.d("SoundOutputPool", "in run. right ear.");
+                        outputDataVector = channelTwo2One(null, inputUnit.getLeftChannel());
+                    }
+
+                } else {
+                    outputDataVector = channelTwo2One(inputUnit.getLeftChannel(), inputUnit.getRightChannel());
+                }
             } else {
                 this.channelNumber = 1;  // !!!
                 outputDataVector = inputUnit.getLeftChannel();
             }
 
 
+            // pipe sound data.
             switch (mode) {
                 case 0:
                     pipeVectorToSpeaker(outputDataVector);
@@ -142,6 +162,7 @@ public class SoundOutputPool extends Thread {
         // close output object.
         switch (mode) {
             case 0:
+                speaker.close();
                 break;
             case 1:
             case 2:
@@ -155,8 +176,7 @@ public class SoundOutputPool extends Thread {
     }
 
     private void pipeVectorToSpeaker(short[] outputVector) {
-
-
+        speaker.write(outputVector);
     }
 
     private void pipeVectorToFile(short[] outputVector) {

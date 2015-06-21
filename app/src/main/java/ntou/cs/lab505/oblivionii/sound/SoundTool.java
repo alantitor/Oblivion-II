@@ -23,25 +23,36 @@ public class SoundTool {
      */
     public static short[] channelTwo2One(short[] leftChannel, short[] rightChannel) {
 
-        short[] outputVector = new short[leftChannel.length * 2];
+        short[] outputVector = null;
 
-        // data: LRLRLRLR...
-        for (int i = 0; i < leftChannel.length; i++) {
-            outputVector[i * 2] = leftChannel[i];
-            outputVector[i * 2 + 1] = rightChannel[i];
+        if (leftChannel != null && rightChannel != null) {  // we have two channel data.
+            outputVector = new short[leftChannel.length * 2];
+            // data: LRLRLRLR...
+            for (int i = 0; i < leftChannel.length; i++) {
+                outputVector[i * 2] = leftChannel[i];
+                outputVector[i * 2 + 1] = rightChannel[i];
+            }
+        } else if (leftChannel == null && rightChannel != null){  // we only have right channel data. set zero to left channel.
+            outputVector = new short[rightChannel.length * 2];
+            // data: 0R0R0R0R...
+            for (int i = 0; i < rightChannel.length; i++) {
+                outputVector[i * 2] = 0;
+                outputVector[i * 2 + 1] = rightChannel[i];
+            }
+        } else if (leftChannel != null && rightChannel == null){  // we only have left channel data. set zero to right channel.
+            outputVector = new short[leftChannel.length * 2];
+            // data: L0L0L0L0...
+            for (int i = 0; i < leftChannel.length; i++) {
+                outputVector[i * 2] = leftChannel[i];
+                outputVector[i * 2 + 1] = 0;
+            }
+        } else {
+            outputVector = new short[2];
+            outputVector[0] = 0;
+            outputVector[1] = 0;
         }
 
         return outputVector;
-    }
-
-    /**
-     * copy one channel sound vector to two channels sound vector.
-     * @param soundVector
-     * @return
-     */
-    public static short[] channelOne2Two(short[] soundVector) {
-
-        return null;
     }
 
     /**

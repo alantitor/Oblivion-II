@@ -124,7 +124,7 @@ public class PureToneTest extends Service {
 
         gain = new Gain(sampleRate, valueGain, valueGain, valueGain);  // 40 dB value. 60 dB value. 80 dB value.
 
-        soundOutputPool = new SoundOutputPool(sampleRate, 1, valueOutput);
+        soundOutputPool = new SoundOutputPool(sampleRate, 2, valueChannel, valueOutput);
 
 
         /**
