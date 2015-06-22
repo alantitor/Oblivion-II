@@ -89,7 +89,7 @@ public class IOSettingActivity extends Activity {
         // save data to database.
         IOSettingAdapter ioSettingAdapter = new IOSettingAdapter(this.getApplicationContext());
         ioSettingAdapter.open();
-        IOSetUnit ioSetUnit = new IOSetUnit();
+        IOSetUnit ioSetUnit = new IOSetUnit(valueChannel, valueInput, valueOutput);
         ioSettingAdapter.saveData(ioSetUnit);
         ioSettingAdapter.close();
     }
