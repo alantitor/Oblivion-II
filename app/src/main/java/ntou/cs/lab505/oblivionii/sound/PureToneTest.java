@@ -6,7 +6,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.util.Arrays;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
@@ -36,7 +35,7 @@ public class PureToneTest extends Service {
     int valueChannel = 0;
     int valueOutput = 0;
     int sampleRate = 16000;
-    int frameSize = 4000;
+    int frameSize = 5000;
     // sound vector
     short[] originSoundVector;
     // function objects
@@ -145,8 +144,21 @@ public class PureToneTest extends Service {
             }
 
             int start = 0;
+            int size = 0;
+            short[] tempSoundVector = new short[frameSize];
             for (int i = 0; i < num; i++) {
-                //soundVectorUnit = new SoundVectorUnit(Arrays.copyOfRange(originSoundVector, start, start + ));
+                start = frameSize * i;
+                size = frameSize;
+                if (start + size > originSoundVector.length) {
+                    size = originSoundVector.length - start;
+                }
+
+                Log.d("debugArray", "array start: " + start);
+                Log.d("debugArray", "array size: " + size);
+
+                System.arraycopy(originSoundVector, start, tempSoundVector, 0, size);
+                soundVectorUnit = new SoundVectorUnit(tempSoundVector);
+                pureToneQueue.add(soundVectorUnit);
             }
         }
 
