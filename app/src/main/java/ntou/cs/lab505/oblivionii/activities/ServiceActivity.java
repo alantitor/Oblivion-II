@@ -44,7 +44,25 @@ public class ServiceActivity extends Activity {
         startActivity(intent);
     }
 
-    private void checkServiceState() {
+    /**
+     * check hearing aid parameters
+     * @return true: if user had set paremeters. false: if user had not set parameters.
+     */
+    public boolean checkParamState() {
 
+        boolean state = false;
+
+
+
+
+        return state;
+    }
+
+    private boolean checkServiceState() {
+
+        boolean state = false;
+
+
+        return state;
     }
 }

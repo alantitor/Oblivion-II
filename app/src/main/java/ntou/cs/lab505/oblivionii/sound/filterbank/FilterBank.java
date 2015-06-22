@@ -134,7 +134,7 @@ public class FilterBank extends Thread {
 
             if (this.channelNumber == 1) {
                 for (int i = 0; i < this.filterBankNumber; i++) {
-                    outputUnit[i] = new SoundVectorUnit(iirBandsLeft.get(i).process(inputUnit.getLeftChannel().clone()));
+                    outputUnit[i] = new SoundVectorUnit(iirBandsLeft.get(i).process(inputUnit.getLeftChannel().clone()));  // should I use clone()?
                     //Log.d("FilterBank", "in runTest. outputUnit length: " + outputUnit[i].getVectorLength());
                     //short[] t = outputUnit[i].getLeftChannel();
                     //Log.d("debug", "value: " + t[1000] + t[1001] + t[1002] + t[1003]);

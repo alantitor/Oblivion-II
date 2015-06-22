@@ -310,6 +310,9 @@
                                 android:layout_gravity="center_vertical"
                                 android:id="@+id/rb_channel_left_activity_pure_tone_test"
                                 android:text="left"
+                                android:textColor="#525252"
+                                android:textSize="18dp"
+                                android:fontFamily="Roboto, sans-serif"
                                 android:checked="true"/>
 
                             <RadioButton
@@ -317,7 +320,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:id="@+id/rb_channel_right_activity_pure_tone_test"
-                                android:text="right"/>
+                                android:text="right"
+                                android:textColor="#525252"
+                                android:textSize="18dp"
+                                android:fontFamily="Roboto, sans-serif"/>
 
                         </RadioGroup>
 
@@ -357,21 +363,30 @@
                                 android:layout_gravity="center_vertical"
                                 android:id="@+id/rb_output_speker_activity_pure_tone_test"
                                 android:text="speaker"
-                                android:checked="true"/>
+                                android:checked="true"
+                                android:textColor="#525252"
+                                android:textSize="18dp"
+                                android:fontFamily="Roboto, sans-serif"/>
 
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:id="@+id/rb_output_df_activity_pure_tone_test"
-                                android:text="file"/>
+                                android:text="file"
+                                android:textColor="#525252"
+                                android:textSize="18dp"
+                                android:fontFamily="Roboto, sans-serif"/>
 
                             <RadioButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:id="@+id/rb_output_wf_activity_pure_tone_test"
-                                android:text="wmv"/>
+                                android:text="wmv"
+                                android:textColor="#525252"
+                                android:textSize="18dp"
+                                android:fontFamily="Roboto, sans-serif"/>
 
                         </RadioGroup>
 
