@@ -9,6 +9,12 @@ public class IOSetUnit {
     private int inputType;
     private int outputType;
 
+    public IOSetUnit() {
+        this.channelNumber = 1;
+        this.inputType = 0;
+        this.outputType = 0;
+    }
+
     public IOSetUnit(int channelNumber, int inputType, int outputType) {
         this.channelNumber = channelNumber;
         this.inputType = inputType;
@@ -24,6 +30,12 @@ public class IOSetUnit {
     }
 
     public void setOutputType(int outputType) {
+        this.outputType = outputType;
+    }
+
+    public void setData(int channelNumber, int inputType, int outputType) {
+        this.channelNumber = channelNumber;
+        this.inputType = inputType;
         this.outputType = outputType;
     }
 

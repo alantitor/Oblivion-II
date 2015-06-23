@@ -80,7 +80,32 @@ public class IOSettingAdapter {
     /**
      *
      */
-    public void getData() {
+    public IOSetUnit getData() {
 
+        String[] projection = {TableContract.T_IO_USERID,
+                                TableContract.T_IO_CHANNEL,
+                                TableContract.T_IO_INPUT,
+                                TableContract.T_IO_OUTPUT};
+        String selection = TableContract.T_IO_USERID + " = ? ";
+        String[] selectionArgs = {DBParams.USER_ID};
+        String sortOrder = "";
+        Cursor c = mDb.query(TableContract.TABLE_IO, projection, selection, selectionArgs, null, null, sortOrder);
+        c.moveToFirst();
+
+        int channelNumber = 1;
+        int inputType = 0;
+        int outputType = 0;
+        IOSetUnit ioSetUnit = new IOSetUnit();
+
+        if (c.getCount() == 1) {
+            channelNumber = Integer.parseInt(c.getString(c.getColumnIndex(TableContract.T_IO_CHANNEL)));
+            inputType = Integer.parseInt((c.getString(c.getColumnIndex(TableContract.T_IO_INPUT))));
+            outputType = Integer.parseInt(c.getString(c.getColumnIndex(TableContract.T_IO_OUTPUT)));
+            ioSetUnit.setData(channelNumber, inputType, outputType);
+        }
+
+        Log.d("IOSettingAdapter", "in getData. data: " + channelNumber + inputType + outputType);
+
+        return ioSetUnit;
     }
 }

@@ -80,7 +80,8 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:text="0"/>
+                            android:text="0"
+                            android:id="@+id/count_activity_freq_setting"/>
 
                     </LinearLayout>
 
@@ -94,7 +95,10 @@
 
                         <SeekBar
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:max="24"
+                            android:progress="12"
+                            android:id="@+id/seekbar_activity_freq_setting"/>
 
                 </LinearLayout>
 

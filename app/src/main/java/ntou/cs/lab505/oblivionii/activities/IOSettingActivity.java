@@ -2,6 +2,7 @@ package ntou.cs.lab505.oblivionii.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import ntou.cs.lab505.oblivionii.R;
@@ -29,7 +30,62 @@ public class IOSettingActivity extends Activity {
     public void onResume() {
         super.onResume();
 
+        IOSettingAdapter ioSettingAdapter = new IOSettingAdapter(this.getApplicationContext());
+        ioSettingAdapter.open();
+        IOSetUnit ioSetUnit = ioSettingAdapter.getData();
+        ioSettingAdapter.close();
 
+        RadioButton rb = null;
+
+        switch (ioSetUnit.getChannelNumber()) {
+            case 1:
+                rb = (RadioButton) findViewById(R.id.rb_channel_one_activity_io_setting);
+                rb.setChecked(true);
+                break;
+            case 2:
+                rb = (RadioButton) findViewById(R.id.rb_channel_two_activity_io_setting);
+                rb.setChecked(true);
+                break;
+            default:
+                rb = (RadioButton) findViewById(R.id.rb_channel_one_activity_io_setting);
+                rb.setChecked(true);
+        }
+
+        switch (ioSetUnit.getInputType()) {
+            case 0:
+                rb = (RadioButton) findViewById(R.id.rb_input_microphone_activity_io_setting);
+                rb.setChecked(true);
+                break;
+            case 1:
+                rb = (RadioButton) findViewById(R.id.rb_input_insidestream_activity_io_setting);
+                rb.setChecked(true);
+                break;
+            case 2:
+                rb = (RadioButton) findViewById(R.id.rb_input_wmv_activity_io_setting);
+                rb.setChecked(true);
+                break;
+            default:
+                rb = (RadioButton) findViewById(R.id.rb_input_microphone_activity_io_setting);
+                rb.setChecked(true);
+        }
+
+        switch (ioSetUnit.getOutputType()) {
+            case 0:
+                rb = (RadioButton) findViewById(R.id.rb_output_speaker_activity_io_setting);
+                rb.setChecked(true);
+                break;
+            case 1:
+                rb = (RadioButton) findViewById(R.id.rb_output_datafile_activity_io_setting);
+                rb.setChecked(true);
+                break;
+            case 2:
+                rb = (RadioButton) findViewById(R.id.rb_output_wmv_activity_io_setting);
+                rb.setChecked(true);
+                break;
+            default:
+                rb = (RadioButton) findViewById(R.id.rb_output_speaker_activity_io_setting);
+                rb.setChecked(true);
+        }
     }
 
     @Override
