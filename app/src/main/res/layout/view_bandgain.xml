@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="#FFF"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:background="#4386FC"
+            android:layout_marginRight="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textColor="#525252"
+                    android:textSize="18dp"
+                    android:fontFamily="Roboto, sans-serif"
+                    android:text="頻帶: "/>
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#525252"
+                    android:textSize="18dp"
+                    android:fontFamily="Roboto, sans-serif"
+                    android:maxLength="4"
+                    android:inputType="number"
+                    android:id="@+id/lowBand_view_bandgain"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#525252"
+                    android:textSize="18dp"
+                    android:fontFamily="Roboto, sans-serif"
+                    android:text=" ~ "/>
+
+                <EditText
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#525252"
+                    android:textSize="18dp"
+                    android:fontFamily="Roboto, sans-serif"
+                    android:maxLength="4"
+                    android:inputType="number"
+                    android:id="@+id/highband_view_bandgain"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#525252"
+                    android:textSize="18dp"
+                    android:fontFamily="Roboto, sans-serif"
+                    android:text="40dB: "/>
+
+                <EditText
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#525252"
+                    android:textSize="18dp"
+                    android:fontFamily="Roboto, sans-serif"
+                    android:maxLength="1"
+                    android:inputType="numberSigned"
+                    android:id="@+id/gain40_view_bandgain"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#525252"
+                    android:textSize="18dp"
+                    android:fontFamily="Roboto, sans-serif"
+                    android:text="60dB: "/>
+
+                <EditText
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#525252"
+                    android:textSize="18dp"
+                    android:fontFamily="Roboto, sans-serif"
+                    android:maxLength="1"
+                    android:inputType="numberSigned"
+                    android:id="@+id/gain60_view_bandgain"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#525252"
+                    android:textSize="18dp"
+                    android:fontFamily="Roboto, sans-serif"
+                    android:text="80dB: "/>
+
+                <EditText
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#525252"
+                    android:textSize="18dp"
+                    android:fontFamily="Roboto, sans-serif"
+                    android:maxLength="1"
+                    android:inputType="numberSigned"
+                    android:id="@+id/gain80_view_bandgain"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

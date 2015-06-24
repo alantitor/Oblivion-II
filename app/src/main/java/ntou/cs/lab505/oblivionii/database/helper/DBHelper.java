@@ -42,14 +42,20 @@ public class DBHelper extends SQLiteOpenHelper {
         String SQL_CREATE_TABLE_BAND =
                 "CREATE TABLE" + WS + TableContract.TABLE_BAND + " ( " +
                 TableContract._ID + WS + TableContract.TYPE_INTEGER + WS + " PRIMARY KEY " + CS +
-                TableContract.T_BAND_USERID +
-                TableContract.T_BAND_STATE +
+                TableContract.T_BAND_USERID + WS + TableContract.TYPE_INTEGER + CS +
+                TableContract.T_BAND_LR + WS + TableContract.TYPE_INTEGER + CS +
+                TableContract.T_BAND_LOWBAND + WS + TableContract.TYPE_INTEGER + CS +
+                TableContract.T_BAND_HIGHBAND + WS + TableContract.TYPE_INTEGER + CS +
+                TableContract.T_BAND_GAIN40 + WS + TableContract.TYPE_INTEGER + CS +
+                TableContract.T_BAND_GAIN60 + WS + TableContract.TYPE_INTEGER + CS +
+                TableContract.T_BAND_GAIN80 + WS + TableContract.TYPE_INTEGER + CS +
+                TableContract.T_BAND_STATE + WS + TableContract.TYPE_INTEGER +
                 " ) ";
 
         // exclude sqlite commands.
         db.execSQL(SQL_CREATE_TABLE_IO);
         db.execSQL(SQL_CREATE_TABLE_FREQSHIFT);
-        //db.execSQL(SQL_CREATE_TABLE_BAND);
+        db.execSQL(SQL_CREATE_TABLE_BAND);
 
         // initial db table columns.
         // needless.

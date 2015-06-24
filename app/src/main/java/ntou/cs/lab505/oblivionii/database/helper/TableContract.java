@@ -32,15 +32,11 @@ public class TableContract implements BaseColumns {
     public static final String T_FREQSHIFT_STATE = "state";
     // "band_setting" table content
     public static final String T_BAND_USERID = "user_id";
-    // num
-    // lr
-    // lowband
-    // highband
-    // gainL40
-    // gainL60
-    // gainL80
-    // gainR40
-    // gainR60
-    // gainR80
+    public static final String T_BAND_LR = "lr";
+    public static final String T_BAND_LOWBAND = "low_band";
+    public static final String T_BAND_HIGHBAND = "high_band";
+    public static final String T_BAND_GAIN40 = "gain40";
+    public static final String T_BAND_GAIN60 = "gain60";
+    public static final String T_BAND_GAIN80 = "gain80";
     public static final String T_BAND_STATE = "state";
 }

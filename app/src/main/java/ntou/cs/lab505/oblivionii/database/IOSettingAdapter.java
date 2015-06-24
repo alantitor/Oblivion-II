@@ -61,7 +61,7 @@ public class IOSettingAdapter {
             mDb.insert(TableContract.TABLE_IO, null, insertValues);
         } else {
             // update old data.
-            long db_id = Long.parseLong(c.getString(c.getColumnIndex(TableContract._ID)));
+            //long db_id = Long.parseLong(c.getString(c.getColumnIndex(TableContract._ID)));
             mDb.execSQL("UPDATE " + TableContract.TABLE_IO +
                             " SET " + TableContract.T_IO_CHANNEL + " = " + ioSetUnit.getChannelNumber() + " , " +
                             TableContract.T_IO_INPUT + " = " + ioSetUnit.getInputType() + " , " +
