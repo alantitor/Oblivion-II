@@ -49,7 +49,8 @@
                         android:text="左聲道"
                         android:fontFamily="Roboto, sans-serif"
                         android:textSize="14dp"
-                        android:textColor="#6AB344"/>
+                        android:textColor="#6AB344"
+                        android:id="@+id/controltitle_left_activity_band_setting"/>
 
                 </LinearLayout>
 
@@ -102,7 +103,8 @@
                 android:orientation="vertical"
                 android:background="#FFF"
                 android:padding="20dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:id="@+id/control_right_activity_band_setting">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -115,7 +117,7 @@
                         android:text="右聲道"
                         android:fontFamily="Roboto, sans-serif"
                         android:textSize="14dp"
-                        android:textColor="#6AB344"/>
+                        android:textColor="#6AB344" />
 
                 </LinearLayout>
 
