@@ -69,6 +69,6 @@ public class BandGainSetUnit {
     }
 
     public int getGain80() {
-        return this.gainSetUnit.getGain60();
+        return this.gainSetUnit.getGain80();
     }
 }
