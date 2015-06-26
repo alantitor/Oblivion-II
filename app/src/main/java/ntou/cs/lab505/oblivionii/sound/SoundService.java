@@ -2,7 +2,9 @@ package ntou.cs.lab505.oblivionii.sound;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -18,71 +20,51 @@ import ntou.cs.lab505.oblivionii.stream.SoundOutputPool;
  */
 public class SoundService extends Service {
 
-    // sound parameters
-    int valueFreq;
-    int valueDb;
-    int valueHarm;
-    int valueSec;
-    int valueBcLow;
-    int valueBcHigh;
-    int valueSemitone;
-    int valueGain;
-    int valueChannel = 0;
-    int valueOutput = 0;
-    int sampleRate = 16000;
-    int frameSize = 4000;
-    // sound vector
-    short[] originSoundVector;
-    // function objects
-    SoundInputPool soundInputPool;
-    FrequencyShift frequencyShift;
-    FilterBank filterBank;
-    Gain gain;
-    SoundOutputPool soundOutputPool;
-    // data queues.
-    LinkedBlockingQueue<SoundVectorUnit> pureToneQueue = new LinkedBlockingQueue<>();
-    LinkedBlockingQueue<SoundVectorUnit> freqShiftQueue = new LinkedBlockingQueue<>();
-    LinkedBlockingQueue<SoundVectorUnit[]> filterBankQueue = new LinkedBlockingQueue<>();
-    LinkedBlockingQueue<SoundVectorUnit> gainQueue = new LinkedBlockingQueue<>();
 
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public class SoundServiceBinder extends Binder {
+        public SoundService getService() {
+            return SoundService.this;
+        }
     }
+
+    private final IBinder mBinder = new SoundServiceBinder();
 
     @Override
     public void onCreate() {
-        //Log.d("PureToneTest", "in onCreate.");
+        Log.d("SoundService", "in onCreate.");
         super.onCreate();
     }
 
     @Override
     public void onDestroy() {
-        //Log.d("PureToneTest", "in onDestroy.");
+        Log.d("SoundService", "in onDestroy.");
         super.onDestroy();
     }
 
-    public void initParameters(int valueFreq, int valueDb, int valueHarm, int valueSec, int valueBcLow, int valueBcHigh, int valueSemitone, int valueGain, int valueChannel, int valueOutput) {
-        this.valueFreq = valueFreq;
-        this.valueDb = valueDb;
-        this.valueHarm = valueHarm;
-        this.valueSec = valueSec;
-        this.valueBcLow = valueBcLow;
-        this.valueBcHigh = valueBcHigh;
-        this.valueSemitone = valueSemitone;
-        this.valueGain = valueGain;
-        this.valueChannel = valueChannel;
-        this.valueOutput = valueOutput;
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
     }
 
-    public void runService() {
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
 
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return super.onUnbind(intent);
+    }
+
+    public void initService() {
+        Log.d("SoundService", "in initService. checked.");
+    }
+
+    public void serviceStart() {
+
+    }
+
+    public void ServiceStop() {
 
     }
 }
-
-/*
-* bind method.
-*
-* */

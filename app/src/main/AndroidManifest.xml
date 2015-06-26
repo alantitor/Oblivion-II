@@ -39,6 +39,8 @@
 
         <service android:name=".sound.PureToneTest" />
 
+        <service android:name=".sound.SoundService" />
+
         <activity
             android:name=".activities.IOSettingActivity"
             android:label="@string/title_activity_iosetting" >

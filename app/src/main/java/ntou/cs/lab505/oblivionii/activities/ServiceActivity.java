@@ -2,9 +2,13 @@ package ntou.cs.lab505.oblivionii.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,11 +19,14 @@ import ntou.cs.lab505.oblivionii.database.BandSettingAdapter;
 import ntou.cs.lab505.oblivionii.database.FreqSettingAdapter;
 import ntou.cs.lab505.oblivionii.database.IOSettingAdapter;
 import ntou.cs.lab505.oblivionii.sound.SoundService;
+import ntou.cs.lab505.oblivionii.sound.SoundService.SoundServiceBinder;
 
 public class ServiceActivity extends Activity {
 
     boolean serviceState = false;
-    SoundService soundService;
+    boolean boundState = false;
+    private SoundService soundService;
+
     ImageView controlButton;
 
     @Override
@@ -30,6 +37,39 @@ public class ServiceActivity extends Activity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         // get object.
         controlButton = (ImageView) findViewById(R.id.servicecontrol_activity_service);
+    }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d("ServiceActivity", "onSrviceConnected.");
+            SoundServiceBinder mBinder = (SoundServiceBinder) service;
+            soundService = mBinder.getService();
+            boundState = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d("ServiceActivity", "onServiceDisconnected.");
+            boundState = false;
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        Log.d("ServiceActivity", "in onStart.");
+        super.onStart();
+        Intent intent = new Intent(this, SoundService.class);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (boundState) {
+            unbindService(serviceConnection);
+            boundState = false;
+        }
     }
 
     public void buttonService(View view) {
@@ -47,8 +87,11 @@ public class ServiceActivity extends Activity {
             return ;
         }
 
+        if (boundState) {
+            soundService.initService();
+        }
 
-        Log.d("ServiceActivity", "in buttonService. in method.");
+        //Log.d("ServiceActivity", "in buttonService. in method.");
         if (serviceState == false) {
             //Log.d("ServiceActivity", "in buttonService. change to pause.");
             controlButton.setImageResource(R.drawable.ic_music_player_pause_lines_orange_128);
@@ -87,7 +130,7 @@ public class ServiceActivity extends Activity {
         freqSettingAdapter.close();
         bandSettingAdapter.close();
 
-        Log.d("ServiceActivity", "in checkServiceState. state: " + state);
+        //Log.d("ServiceActivity", "in checkServiceState. state: " + state);
 
         return state;
     }
