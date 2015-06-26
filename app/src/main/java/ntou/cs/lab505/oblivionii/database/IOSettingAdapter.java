@@ -108,4 +108,16 @@ public class IOSettingAdapter {
 
         return ioSetUnit;
     }
+
+    public int getDataNumber() {
+
+        String[] projection = {TableContract.T_IO_USERID};
+        String selection = TableContract.T_IO_USERID + " = ? ";
+        String[] selectionArgs = {DBParams.USER_ID};
+        String sortOrder = "";
+        Cursor c = mDb.query(TableContract.TABLE_IO, projection, selection, selectionArgs, null, null, sortOrder);
+        c.moveToFirst();
+
+        return c.getCount();
+    }
 }

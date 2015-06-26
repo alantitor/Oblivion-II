@@ -85,6 +85,7 @@ public class SoundTool {
 
             for (int i = 0; i < leftVector.length; i++) {
                 templ = 0;
+                tempr = 0;
                 for (int j = 0; j < soundVectorUnits.length; j++) {
                     templ += soundVectorUnits[j].getLeftChannel()[i];
                     tempr += soundVectorUnits[j].getRightChannel()[i];

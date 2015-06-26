@@ -8,6 +8,7 @@ import android.util.Log;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+import ntou.cs.lab505.oblivionii.datastructure.BandSetUnit;
 import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
 import ntou.cs.lab505.oblivionii.sound.filterbank.FilterBank;
 import ntou.cs.lab505.oblivionii.sound.frequencyshift.FrequencyShift;
@@ -35,7 +36,7 @@ public class PureToneTest extends Service {
     int valueChannel = 0;
     int valueOutput = 0;
     int sampleRate = 16000;
-    int frameSize = 5000;
+    int frameSize = 4000;
     // sound vector
     short[] originSoundVector;
     // function objects
@@ -126,6 +127,7 @@ public class PureToneTest extends Service {
          */
 
 
+        /*
         // generate sound.
         originSoundVector = harmonicsGeneration.generate(valueFreq, valueSec, valueDb, valueHarm);
         //saveVectorToDataFile(originSoundVector, "origin");
@@ -161,6 +163,51 @@ public class PureToneTest extends Service {
                 pureToneQueue.add(soundVectorUnit);
             }
         }
+        */
+
+
+        SoundVectorUnit soundVectorUnit = null;
+
+        // generate pure tone.
+        for (int count = 0; count < valueSec; count++) {
+            // generate sound.
+            originSoundVector = harmonicsGeneration.generate(valueFreq, 1, valueDb, valueHarm);
+
+            // cut frame.
+            if (originSoundVector.length < frameSize) {
+                soundVectorUnit = new SoundVectorUnit(originSoundVector);
+                pureToneQueue.add(soundVectorUnit);
+            } else {
+                int num = originSoundVector.length / frameSize;
+                if (originSoundVector.length % frameSize != 0) {
+                    num++;
+                }
+
+                int start = 0;
+                int size = 0;
+                short[] tempSoundVector = new short[frameSize];
+                for (int i = 0; i < num; i++) {
+                    start = frameSize * i;
+                    size = frameSize;
+                    if (start + size > originSoundVector.length) {
+                        size = originSoundVector.length - start;
+                    }
+
+                    Log.d("debugArray", "array start: " + start);
+                    Log.d("debugArray", "array size: " + size);
+
+                    System.arraycopy(originSoundVector, start, tempSoundVector, 0, size);
+
+                    if (tempSoundVector == null ||tempSoundVector.length == 0) {
+                        continue;
+                    }
+
+                    soundVectorUnit = new SoundVectorUnit(tempSoundVector);
+                    pureToneQueue.add(soundVectorUnit);
+                }
+            }
+        }
+
 
         // pipe sound.
         //pureToneQueue.add(soundVectorUnit);
@@ -206,15 +253,15 @@ public class PureToneTest extends Service {
         // initial object
         harmonicsGeneration = new HarmonicsGeneration(sampleRate);
         frequencyShift = new FrequencyShift(sampleRate, 1, valueSemitone, 0, 0);
-        filterBank = new FilterBank(sampleRate, valueBcLow, valueBcHigh);
+        //filterBank = new FilterBank(sampleRate, valueBcLow, valueBcHigh);
 
-        //BandSetUnit[ ] bandSetUnit = new BandSetUnit[5];
-        //bandSetUnit[0] = new BandSetUnit(143, 280);
-        //bandSetUnit[1] = new BandSetUnit(281, 561);
-        //bandSetUnit[2] = new BandSetUnit(561, 1120);
-        //bandSetUnit[3] = new BandSetUnit(1110, 2240);
+        BandSetUnit[ ] bandSetUnit = new BandSetUnit[4];
+        bandSetUnit[0] = new BandSetUnit(143, 280);
+        bandSetUnit[1] = new BandSetUnit(281, 561);
+        bandSetUnit[2] = new BandSetUnit(561, 1120);
+        bandSetUnit[3] = new BandSetUnit(1110, 2240);
         //bandSetUnit[4] = new BandSetUnit(2230, 3540);
-        //filterBank = new FilterBank(sampleRate, bandSetUnit);
+        filterBank = new FilterBank(sampleRate, bandSetUnit);
 
         gain = new Gain(sampleRate, valueGain, valueGain, valueGain);  // 40 dB value. 60 dB value. 80 dB value.
 
@@ -243,32 +290,31 @@ public class PureToneTest extends Service {
         //frequencyShift.setInputDataQueue(pureToneQueue);
         //frequencyShift.setOutputDataQueue(freqShiftQueue);
 
-        //filterBank.setInputDataQueue(pureToneQueue);
-        //filterBank.setOutputDataQueue(filterBankQueue);
+        filterBank.setInputDataQueue(pureToneQueue);
+        filterBank.setOutputDataQueue(filterBankQueue);
 
-        //gain.setInputDataQueue(tempQueue);
-        //gain.setOutputDataQueue(gainQueue);
+        gain.setInputDataQueue(filterBankQueue);
+        gain.setOutputDataQueue(gainQueue);
 
-        soundOutputPool.setInputDataQueue(pureToneQueue);
+        soundOutputPool.setInputDataQueue(gainQueue);
 
         // threads start.
         //frequencyShift.threadStat();
-        //filterBank.threadStart();
-        //gain.threadStart();
+        filterBank.threadStart();
+        gain.threadStart();
         soundOutputPool.threadStart();
 
 
         try {
-            //Thread.sleep(valueSec * 1000);
-            Thread.sleep(5000);
+            Thread.sleep(valueSec * 3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
 
         //frequencyShift.threadStop();
-        //filterBank.threadStop();
-        //gain.threadStop();
+        filterBank.threadStop();
+        gain.threadStop();
         soundOutputPool.threadStop();
     }
 

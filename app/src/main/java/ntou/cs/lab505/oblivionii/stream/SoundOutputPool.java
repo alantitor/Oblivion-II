@@ -52,8 +52,10 @@ public class SoundOutputPool extends Thread {
                 writeFile = new WriteFile(1, "speaker");
                 break;
             default:
-                this.mode = 1;
-                writeFile = new WriteFile(0, "speaker");
+                this.mode = 0;
+                speaker = new Speaker(samplerate, channelNumber);
+                //this.mode = 1;
+                //writeFile = new WriteFile(0, "speaker");
         }
     }
 

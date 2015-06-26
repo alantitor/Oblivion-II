@@ -9,7 +9,6 @@ import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
 
 import static ntou.cs.lab505.oblivionii.sound.SoundTool.calculateDb;
 import static ntou.cs.lab505.oblivionii.sound.SoundTool.channelMix;
-import static ntou.cs.lab505.oblivionii.sound.SoundTool.saveVectorToDataFile;
 
 /**
  * Created by alan on 6/10/15.
@@ -106,9 +105,9 @@ public class Gain extends Thread {
             if (this.channelNumber == 1) {
                 // extra bands.
                 for (int i = 0; i < this.bandNumber; i++) {
-                    Log.d("Gain", "in run. before gain, db: " + calculateDb(inputUnit[i].getLeftChannel()));
+                    //Log.d("Gain", "in run. before gain, db: " + calculateDb(inputUnit[i].getLeftChannel()));
                     inputUnit[i] = new SoundVectorUnit(autoGain(inputUnit[i].getLeftChannel(), i, 0));
-                    Log.d("Gain", "in run. after gain, db: " + calculateDb(inputUnit[i].getLeftChannel()));
+                    //Log.d("Gain", "in run. after gain, db: " + calculateDb(inputUnit[i].getLeftChannel()));
                     //saveVectorToDataFile(inputUnit[i].getLeftChannel(), "gain" + (count));
                 }
 

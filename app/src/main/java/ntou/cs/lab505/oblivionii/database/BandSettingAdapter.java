@@ -114,4 +114,15 @@ public class BandSettingAdapter {
         //Log.d("BandSettingAdapter", "in deleteData. delete data.");
         mDb.delete(TableContract.TABLE_BAND, TableContract.T_BAND_USERID + " = " + DBParams.USER_ID, null);
     }
+
+    public int getDataNumber() {
+        String[] projection = {TableContract.T_BAND_USERID,};
+        String selection = TableContract.T_BAND_USERID + " = ? ";
+        String[] selectionArgs = {DBParams.USER_ID};
+        String sortOrder = "";
+        Cursor c = mDb.query(TableContract.TABLE_BAND, projection, selection, selectionArgs, null, null, sortOrder);
+        c.moveToFirst();
+
+        return c.getCount();
+    }
 }

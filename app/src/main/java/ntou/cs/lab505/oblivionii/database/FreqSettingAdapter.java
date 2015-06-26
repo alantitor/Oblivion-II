@@ -82,4 +82,16 @@ public class FreqSettingAdapter {
 
         return semitone;
     }
+
+    public int getDataNumber() {
+
+        String[] projection = {TableContract.T_FREQSHIFT_USERID};
+        String selection = TableContract.T_FREQSHIFT_USERID + " = ? ";
+        String[] selectionArgs = {DBParams.USER_ID};
+        String sortOrder = "";
+        Cursor c = mDb.query(TableContract.TABLE_FREQSHIFT, projection, selection, selectionArgs, null, null, sortOrder);
+        c.moveToFirst();
+
+        return c.getCount();
+    }
 }
