@@ -133,12 +133,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:id="@+id/rb_input_insidestream_activity_io_setting"
-                            android:text="內部音訊"
+                            android:id="@+id/rb_input_datafile_activity_io_setting"
+                            android:text="data file"
                             android:textColor="#525252"
                             android:textSize="18dp"
-                            android:fontFamily="Roboto, sans-serif"
-                            android:visibility="gone"/>
+                            android:fontFamily="Roboto, sans-serif" />
 
                         <RadioButton
                             android:layout_width="wrap_content"
@@ -146,6 +145,16 @@
                             android:layout_gravity="center_vertical"
                             android:id="@+id/rb_input_wmv_activity_io_setting"
                             android:text="wmv"
+                            android:textColor="#525252"
+                            android:textSize="18dp"
+                            android:fontFamily="Roboto, sans-serif" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/rb_input_insidestream_activity_io_setting"
+                            android:text="內部音訊"
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
@@ -202,8 +211,9 @@
                             android:text="data file"
                             android:textColor="#525252"
                             android:textSize="18dp"
-                            android:fontFamily="Roboto, sans-serif"
-                            android:visibility="gone"/>
+                            android:fontFamily="Roboto, sans-serif" />
+                            <!--android:visibility="gone"-->
+
 
                         <RadioButton
                             android:layout_width="wrap_content"

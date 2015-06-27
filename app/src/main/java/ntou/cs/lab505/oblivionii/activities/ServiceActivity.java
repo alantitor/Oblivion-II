@@ -74,32 +74,35 @@ public class ServiceActivity extends Activity {
 
     public void buttonService(View view) {
 
-        if (checkServiceState() == false) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            TextView message = new TextView(this);
-            message.setText("請先設定助聽器參數");
-            //message.setGravity(Gravity.CENTER);
-            builder.setView(message);
-            builder.setPositiveButton("OK", null);
-            AlertDialog dialong = builder.show();
-            dialong.show();
-
-            return ;
-        }
-
-        if (boundState) {
-            soundService.initService();
-        }
-
-        //Log.d("ServiceActivity", "in buttonService. in method.");
         if (serviceState == false) {
-            //Log.d("ServiceActivity", "in buttonService. change to pause.");
-            controlButton.setImageResource(R.drawable.ic_music_player_pause_lines_orange_128);
-            serviceState = true;
+            if (checkServiceState() == false) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                TextView message = new TextView(this);
+                message.setText("請先設定助聽器參數");
+                //message.setGravity(Gravity.CENTER);
+                builder.setView(message);
+                builder.setPositiveButton("OK", null);
+                AlertDialog dialong = builder.show();
+                dialong.show();
+
+                return ;
+            }
+
+            if (boundState) {
+                soundService.initService();
+
+                controlButton.setImageResource(R.drawable.ic_music_player_pause_lines_orange_128);
+                serviceState = true;
+
+                soundService.serviceStart();
+            }
         }else {
-            //Log.d("ServiceActivity", "in buttonService. change to play.");
             controlButton.setImageResource(R.drawable.ic_music_player_play_orange_128);
             serviceState = false;
+
+            if (boundState) {
+                soundService.serviceStop();
+            }
         }
     }
 
