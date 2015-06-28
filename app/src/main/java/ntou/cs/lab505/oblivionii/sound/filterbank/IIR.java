@@ -85,13 +85,14 @@ public class IIR {
         band_coefficient_a = getDen();
 
         Log.d("DEBUG", "a=");
-
-        for(int i=0;i<band_coefficient_a.length;i++)
+        for(int i=0;i<band_coefficient_a.length;i++) {
             Log.d("DEBUG", Double.toString(band_coefficient_a[i]));
+        }
 
         Log.d("DEBUG", "b=");
-        for(int i=0;i<2*FilterOrder+1;i++)
+        for(int i=0;i<2*FilterOrder+1;i++) {
             Log.d("DEBUG", Double.toString(band_coefficient_b[i]));
+        }
         //System.out.println(band_coefficient_b[i]);
         x = new double[band_coefficient_b.length-1];
         y = new double[band_coefficient_a.length];
@@ -281,7 +282,7 @@ public class IIR {
     private double[] res = null;
     public short[] process(short[] value)
     {
-        Log.d("IIR", "process: value length = " + value.length);
+        //Log.d("IIR", "process: value length = " + value.length);
 
         for(int i=0;i<value.length;i++)
         {

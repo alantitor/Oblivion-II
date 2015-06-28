@@ -98,6 +98,8 @@ public class SoundInputPool extends Thread {
 
         // do function.
         while (threadState) {
+            outputDataVector = null;
+
             switch (mode) {
                 case 0:
                     outputDataVector = pipeMicrophoneToVector();

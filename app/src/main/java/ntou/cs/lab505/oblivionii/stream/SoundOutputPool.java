@@ -113,6 +113,7 @@ public class SoundOutputPool extends Thread {
         // do function.
         while (threadState) {
             // take data from queue.
+            inputUnit = null;
             inputUnit = inputDataQueue.poll();
 
             if (inputUnit == null) {
@@ -121,7 +122,7 @@ public class SoundOutputPool extends Thread {
             if (inputUnit.getVectorLength() == 0) {
                 continue;
             }
-            Log.d("SoundOutputPool", "in run. inputUnit length: " + inputUnit.getVectorLength());
+            //Log.d("SoundOutputPool", "in run. inputUnit length: " + inputUnit.getVectorLength());
 
 
             // merge channel sound data.
@@ -130,13 +131,14 @@ public class SoundOutputPool extends Thread {
             } else if (this.channelNumber == 2) {
                 if (inputUnit.getChannelNumber() == 1) {
                     if (lr == 0) {  // only output left ear.
-                        Log.d("SoundOutputPool", "in run. left ear.");
+                        //Log.d("SoundOutputPool", "in run. left ear.");
                         outputDataVector = channelTwo2One(inputUnit.getLeftChannel(), null);
-                    } else {  // only output right ear.
-                        Log.d("SoundOutputPool", "in run. right ear.");
+                    } else if (lr == 1){  // only output right ear.
+                        //Log.d("SoundOutputPool", "in run. right ear.");
                         outputDataVector = channelTwo2One(null, inputUnit.getLeftChannel());
+                    } else {
+                        outputDataVector = channelTwo2One(inputUnit.getLeftChannel(), inputUnit.getLeftChannel());
                     }
-
                 } else {
                     outputDataVector = channelTwo2One(inputUnit.getLeftChannel(), inputUnit.getRightChannel());
                 }

@@ -87,7 +87,7 @@
                     android:textColor="#525252"
                     android:textSize="18dp"
                     android:fontFamily="Roboto, sans-serif"
-                    android:maxLength="1"
+                    android:maxLength="2"
                     android:inputType="numberSigned"
                     android:id="@+id/gain40_view_bandgain"/>
 
@@ -106,7 +106,7 @@
                     android:textColor="#525252"
                     android:textSize="18dp"
                     android:fontFamily="Roboto, sans-serif"
-                    android:maxLength="1"
+                    android:maxLength="2"
                     android:inputType="numberSigned"
                     android:id="@+id/gain60_view_bandgain"/>
 
@@ -125,7 +125,7 @@
                     android:textColor="#525252"
                     android:textSize="18dp"
                     android:fontFamily="Roboto, sans-serif"
-                    android:maxLength="1"
+                    android:maxLength="2"
                     android:inputType="numberSigned"
                     android:id="@+id/gain80_view_bandgain"/>
 

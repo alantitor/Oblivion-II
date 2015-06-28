@@ -23,12 +23,12 @@ public class Microphone {
         this.sampleRate = sampleRate;
 
         recordBufSize = AudioRecord.getMinBufferSize(sampleRate,
-                                                        CHANNEL_IN_MONO,
-                                                        ENCODING_PCM_16BIT);
+                                                        AudioFormat.CHANNEL_CONFIGURATION_MONO,
+                                                        AudioFormat.ENCODING_PCM_16BIT);
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
                                         sampleRate,
-                                        CHANNEL_IN_MONO,
-                                        ENCODING_PCM_16BIT,
+                                        AudioFormat.CHANNEL_CONFIGURATION_MONO,  // CHANNEL_IN_MONO
+                                        AudioFormat.ENCODING_PCM_16BIT,
                                         recordBufSize);
         dataVector = new short[recordBufSize];
     }

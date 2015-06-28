@@ -61,7 +61,7 @@ public class SoundTool {
      * @return
      */
     public static SoundVectorUnit channelMix(SoundVectorUnit[] soundVectorUnits) {
-        Log.d("SoundTool", "in channelMix. band number: " + soundVectorUnits.length);
+        //Log.d("SoundTool", "in channelMix. band number: " + soundVectorUnits.length);
         SoundVectorUnit outputVector = null;
 
         if (soundVectorUnits[0].getChannelNumber() == 1) {  // one channel.

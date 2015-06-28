@@ -14,6 +14,7 @@ import ntou.cs.lab505.oblivionii.sound.filterbank.FilterBank;
 import ntou.cs.lab505.oblivionii.sound.frequencyshift.FrequencyShift;
 import ntou.cs.lab505.oblivionii.sound.gain.Gain;
 import ntou.cs.lab505.oblivionii.sound.soundgeneration.HarmonicsGeneration;
+import ntou.cs.lab505.oblivionii.stream.SoundInputPool;
 import ntou.cs.lab505.oblivionii.stream.SoundOutputPool;
 
 import static ntou.cs.lab505.oblivionii.sound.SoundTool.saveVectorToDataFile;
@@ -36,16 +37,18 @@ public class PureToneTest extends Service {
     int valueChannel = 0;
     int valueOutput = 0;
     int sampleRate = 16000;
-    int frameSize = 4000;
+    int frameSize = 1400;
     // sound vector
     short[] originSoundVector;
     // function objects
+    SoundInputPool soundInputPool;
     HarmonicsGeneration harmonicsGeneration;
     FrequencyShift frequencyShift;
     FilterBank filterBank;
     Gain gain;
     SoundOutputPool soundOutputPool;
     // data queues.
+    LinkedBlockingQueue<SoundVectorUnit> soundInputQueue = new LinkedBlockingQueue<>();
     LinkedBlockingQueue<SoundVectorUnit> pureToneQueue = new LinkedBlockingQueue<>();
     LinkedBlockingQueue<SoundVectorUnit> freqShiftQueue = new LinkedBlockingQueue<>();
     LinkedBlockingQueue<SoundVectorUnit[]> filterBankQueue = new LinkedBlockingQueue<>();
@@ -193,8 +196,8 @@ public class PureToneTest extends Service {
                         size = originSoundVector.length - start;
                     }
 
-                    Log.d("debugArray", "array start: " + start);
-                    Log.d("debugArray", "array size: " + size);
+                    //Log.d("debugArray", "array start: " + start);
+                    //Log.d("debugArray", "array size: " + size);
 
                     System.arraycopy(originSoundVector, start, tempSoundVector, 0, size);
 
@@ -243,54 +246,59 @@ public class PureToneTest extends Service {
         soundOutputPool.threadStop();
     }
 
+    boolean runState = false;
     public void runTestDebug() {
 
-        // check device type. check sample rate. check channel number.
-        Log.d("PureToneTest", "in runtest. state: " + checkOutputDeviceState(0));
-        Log.d("PureToneTest", "in runtest. state: " + checkOutputDeviceState(1));
-        Log.d("PureToneTest", "in runtest. state: " + checkOutputDeviceState(2));
+        if (runState) {
+            soundInputPool.threadStop();
+            frequencyShift.threadStop();
+            filterBank.threadStop();
+            gain.threadStop();
+            soundOutputPool.threadStop();
+            runState = false;
+
+            return ;
+        }
+
 
         // initial object
-        harmonicsGeneration = new HarmonicsGeneration(sampleRate);
-        frequencyShift = new FrequencyShift(sampleRate, 1, valueSemitone, 0, 0);
-        //filterBank = new FilterBank(sampleRate, valueBcLow, valueBcHigh);
+        soundInputPool = new SoundInputPool(sampleRate, 0);
 
-        BandSetUnit[ ] bandSetUnit = new BandSetUnit[4];
-        bandSetUnit[0] = new BandSetUnit(143, 280);
-        bandSetUnit[1] = new BandSetUnit(281, 561);
-        bandSetUnit[2] = new BandSetUnit(561, 1120);
-        bandSetUnit[3] = new BandSetUnit(1110, 2240);
+        //harmonicsGeneration = new HarmonicsGeneration(sampleRate);
+
+        frequencyShift = new FrequencyShift(sampleRate, 1, valueSemitone, 0, 0);
+
+        filterBank = new FilterBank(sampleRate, valueBcLow, valueBcHigh);
+
+        //BandSetUnit[ ] bandSetUnit = new BandSetUnit[4];
+        //bandSetUnit[0] = new BandSetUnit(143, 280);
+        //bandSetUnit[1] = new BandSetUnit(281, 561);
+        //bandSetUnit[2] = new BandSetUnit(561, 1120);
+        //bandSetUnit[3] = new BandSetUnit(1110, 2240);
         //bandSetUnit[4] = new BandSetUnit(2230, 3540);
-        filterBank = new FilterBank(sampleRate, bandSetUnit);
+        //filterBank = new FilterBank(sampleRate, bandSetUnit);
 
         gain = new Gain(sampleRate, valueGain, valueGain, valueGain);  // 40 dB value. 60 dB value. 80 dB value.
 
-        soundOutputPool = new SoundOutputPool(sampleRate, 2, valueChannel, valueOutput);
-
-
-        /**
-         * algorithm:
-         *  (1) generate pure tone.
-         *  (2) shift frequency.
-         *  (3) filter bank.
-         *  (4) gain bands.
-         *  (5) output sound.
-         */
+        soundOutputPool = new SoundOutputPool(sampleRate, 1, valueChannel, valueOutput);
 
 
         // generate sound.
-        originSoundVector = harmonicsGeneration.generate(valueFreq, valueSec, valueDb, valueHarm);
-        Log.d("PureToneTest", "in runTest. originSoundVector length: " + originSoundVector.length);
-        saveVectorToDataFile(originSoundVector, "origin");
-        SoundVectorUnit soundVectorUnit = new SoundVectorUnit(originSoundVector);
+        //originSoundVector = harmonicsGeneration.generate(valueFreq, valueSec, valueDb, valueHarm);
+        //Log.d("PureToneTest", "in runTest. originSoundVector length: " + originSoundVector.length);
+        //saveVectorToDataFile(originSoundVector, "origin");
+        //SoundVectorUnit soundVectorUnit = new SoundVectorUnit(originSoundVector);
         //Log.d("PureToneTest", "in runTest. soundVectorUnit length: " + soundVectorUnit.getVectorLength());
 
         // pipe sound.
-        pureToneQueue.add(soundVectorUnit);
+        soundInputPool.setOutputDataQueu(soundInputQueue);
+
+        //pureToneQueue.add(soundVectorUnit);
+
         //frequencyShift.setInputDataQueue(pureToneQueue);
         //frequencyShift.setOutputDataQueue(freqShiftQueue);
 
-        filterBank.setInputDataQueue(pureToneQueue);
+        filterBank.setInputDataQueue(soundInputQueue);
         filterBank.setOutputDataQueue(filterBankQueue);
 
         gain.setInputDataQueue(filterBankQueue);
@@ -298,24 +306,30 @@ public class PureToneTest extends Service {
 
         soundOutputPool.setInputDataQueue(gainQueue);
 
+
         // threads start.
+        soundInputPool.threadStart();
         //frequencyShift.threadStat();
         filterBank.threadStart();
         gain.threadStart();
         soundOutputPool.threadStart();
 
 
+        /*
         try {
-            Thread.sleep(valueSec * 3000);
+            Thread.sleep(valueSec * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        */
 
 
+        //soundInputPool.threadStop();
         //frequencyShift.threadStop();
-        filterBank.threadStop();
-        gain.threadStop();
-        soundOutputPool.threadStop();
+        //filterBank.threadStop();
+        //gain.threadStop();
+        //soundOutputPool.threadStop();
+        runState = true;
     }
 
     /**

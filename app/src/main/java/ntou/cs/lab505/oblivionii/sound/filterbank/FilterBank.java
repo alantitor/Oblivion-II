@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import ntou.cs.lab505.oblivionii.datastructure.BandGainSetUnit;
 import ntou.cs.lab505.oblivionii.datastructure.BandSetUnit;
 import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
 
@@ -76,6 +77,24 @@ public class FilterBank extends Thread {
         }
     }
 
+    public FilterBank(int sampleRate, ArrayList<BandGainSetUnit> bandGainSetUnitArrayList) {
+
+        /*
+         * not finish.
+         * do not use this contructor.
+         * */
+
+        this.sampleRate = sampleRate;
+
+        for (int i = 0; i < bandGainSetUnitArrayList.size(); i++) {
+            if (bandGainSetUnitArrayList.get(i).getLr() == 0) {
+                iirBandsLeft.add(new IIR(this.filterOrder, sampleRate, bandGainSetUnitArrayList.get(i).getLowBand(), bandGainSetUnitArrayList.get(i).getHighBand()));
+            } else {
+                iirBandsRight.add(new IIR(this.filterOrder, sampleRate, bandGainSetUnitArrayList.get(i).getLowBand(), bandGainSetUnitArrayList.get(i).getHighBand()));
+            }
+        }
+    }
+
     /**
      * multi band cut.
      */
@@ -120,6 +139,7 @@ public class FilterBank extends Thread {
         while (threadState) {
             this.startTime = System.nanoTime();
             // take data from queue.
+            inputUnit = null;
             //inputUnit = inputDataQueue.take();
             inputUnit = inputDataQueue.poll();
 
@@ -129,7 +149,7 @@ public class FilterBank extends Thread {
             if (inputUnit.getVectorLength() == 0) {
                 continue;
             }
-            Log.d("FilterBank", "in run. inputUnit length: " + inputUnit.getVectorLength());
+            //Log.d("FilterBank", "in run. inputUnit length: " + inputUnit.getVectorLength());
 
 
             if (this.channelNumber == 1) {

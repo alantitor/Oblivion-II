@@ -48,7 +48,7 @@ public class IOSettingAdapter {
         Cursor c = mDb.query(TableContract.TABLE_IO, projection, selection, selectionArgs, null, null, sortOrder);
         c.moveToFirst();
 
-        Log.d("IOSettingAdapter", "in saveData. count: " + c.getCount());
+        //Log.d("IOSettingAdapter", "in saveData. count: " + c.getCount());
         if (c.getCount() != 1) {
             // delete old data.
             // insert new data.
@@ -104,7 +104,7 @@ public class IOSettingAdapter {
             ioSetUnit.setData(channelNumber, inputType, outputType);
         }
 
-        Log.d("IOSettingAdapter", "in getData. data: " + channelNumber + inputType + outputType);
+        //Log.d("IOSettingAdapter", "in getData. data: " + channelNumber + inputType + outputType);
 
         return ioSetUnit;
     }

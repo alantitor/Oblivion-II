@@ -117,6 +117,7 @@ public class FrequencyShift extends Thread {
             //this.startTime = System.currentTimeMillis();
             this.startTime = System.nanoTime();
             // take data from queue.
+            inputUnit = null;
             inputUnit = inputDataQueue.poll();
 
             if (inputUnit == null) {
@@ -125,16 +126,16 @@ public class FrequencyShift extends Thread {
             if (inputUnit.getVectorLength() == 0) {
                 continue;
             }
-            Log.d("FrequencyShift", "in run. inputUnit length: " + inputUnit.getVectorLength());
+            //Log.d("FrequencyShift", "in run. inputUnit length: " + inputUnit.getVectorLength());
 
 
             if (inputUnit.getLeftChannel() != null) {
-                Log.d("Frequency", "in runTest. get data.");
+                //Log.d("Frequency", "in runTest. get data.");
                 soundtouch.putSamples(inputUnit.getLeftChannel(), inputUnit.getLeftChannel().length);
 
                 do {
                     outputUnit.setLeftChannel(soundtouch.receiveSamples());
-                    Log.d("FrequencyShift", "in run. outputUnit length: " + outputUnit.getVectorLength());
+                    //Log.d("FrequencyShift", "in run. outputUnit length: " + outputUnit.getVectorLength());
 
                     // stop some time.
                     // close it.

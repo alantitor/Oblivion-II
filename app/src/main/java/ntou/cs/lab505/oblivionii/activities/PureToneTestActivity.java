@@ -139,7 +139,7 @@ public class PureToneTestActivity extends Activity {
 
         if (boundState) {
             pureToneTest.initParameters(valueFreq, valueDb, valueHarm, valueSec, valueBcLow, valueBcHigh, valueSemitone, valueGain, valueChannel, valueOutput);
-            pureToneTest.runTest();
+            pureToneTest.runTestDebug();
         }
     }
 }

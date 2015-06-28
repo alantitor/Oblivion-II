@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import ntou.cs.lab505.oblivionii.datastructure.GainSetUnit;
 import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
 
 import static ntou.cs.lab505.oblivionii.sound.SoundTool.calculateDb;
@@ -56,6 +57,18 @@ public class Gain extends Thread {
         this.gain80R.add(Math.pow(10, gain80R / 20));
     }
 
+    public Gain(int sampleRate, GainSetUnit[] gainSetUnits) {
+        this.sampleRate = sampleRate;
+        this.channelNumber = 1;
+        this.bandNumber = gainSetUnits.length;
+
+        for (int i = 0; i < gainSetUnits.length; i++) {
+            this.gain40L.add(Math.pow(10, gainSetUnits[i].getGain40() / 20));
+            this.gain60L.add(Math.pow(10, gainSetUnits[i].getGain60() / 20));
+            this.gain80L.add(Math.pow(10, gainSetUnits[i].getGain80() / 20));
+        }
+    }
+
     public void setInputDataQueue(LinkedBlockingQueue<SoundVectorUnit[]> inputDataQueue) {
         this.inputDataQueue = inputDataQueue;
     }
@@ -91,6 +104,7 @@ public class Gain extends Thread {
 
         int count = 0;
         while (threadState) {
+            inputUnit = null;
             inputUnit = inputDataQueue.poll();
 
             if (inputUnit == null) {
@@ -99,7 +113,7 @@ public class Gain extends Thread {
             if (inputUnit.length == 0) {
                 continue;
             }
-            Log.d("Gain", "in run. inputUnit length: " + inputUnit[0].getVectorLength());
+            //Log.d("Gain", "in run. inputUnit length: " + inputUnit[0].getVectorLength());
 
 
             if (this.channelNumber == 1) {

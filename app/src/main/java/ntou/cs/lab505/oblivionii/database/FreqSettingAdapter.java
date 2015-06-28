@@ -78,7 +78,7 @@ public class FreqSettingAdapter {
             semitone = Integer.parseInt(c.getString(c.getColumnIndex(TableContract.T_FREQSHIFT_SEMITONE)));
         }
 
-        Log.d("FreqSettingAdapter", "in getData. data: " + semitone);
+        //Log.d("FreqSettingAdapter", "in getData. data: " + semitone);
 
         return semitone;
     }

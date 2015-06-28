@@ -1,8 +1,8 @@
 <resources>
     <!-- app name -->
-    <string name="app_name">OBLIBION II</string>
+    <string name="app_name">SERENITY</string>
     <!-- activity title -->
-    <string name="title_activity_logo">OBLIVION II</string>
+    <string name="title_activity_logo">serenity</string>
     <string name="title_activity_service">ServiceActivity</string>
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_activity_pure_tone_test">PureToneTestActivity</string>
