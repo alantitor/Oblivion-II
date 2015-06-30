@@ -41,12 +41,10 @@ public class SoundInputPool extends Thread {
             case 1:
                 break;
             case 2:
-                break;
             case 3:
                 break;
             default:
                 this.mode = 0;
-
         }
     }
 
@@ -87,8 +85,8 @@ public class SoundInputPool extends Thread {
                 microphone.open();
                 break;
             case 1:
-            case 2:
                 break;
+            case 2:
             case 3:
                 break;
             default:
@@ -105,8 +103,8 @@ public class SoundInputPool extends Thread {
                     outputDataVector = pipeMicrophoneToVector();
                     break;
                 case 1:
-                case 2:
                     break;
+                case 2:
                 case 3:
                     break;
                 default:

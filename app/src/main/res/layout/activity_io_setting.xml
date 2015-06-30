@@ -118,6 +118,7 @@
                         android:orientation="vertical"
                         android:id="@+id/rg_input_activity_io_setting">
 
+                        <!-- value: 0 -->
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -127,8 +128,22 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:checked="true" />
+                            android:checked="true"
+                            android:visibility="visible"/>
 
+                        <!-- value: 1 -->
+                        <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/rb_input_insidestream_activity_io_setting"
+                        android:text="內部音訊"
+                        android:textColor="#525252"
+                        android:textSize="18dp"
+                        android:fontFamily="Roboto, sans-serif"
+                        android:visibility="visible"/>
+
+                        <!-- value: 2 -->
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -137,8 +152,10 @@
                             android:text="data file"
                             android:textColor="#525252"
                             android:textSize="18dp"
-                            android:fontFamily="Roboto, sans-serif" />
+                            android:fontFamily="Roboto, sans-serif"
+                            android:visibility="visible"/>
 
+                        <!-- value: 3 -->
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -147,18 +164,8 @@
                             android:text="wmv"
                             android:textColor="#525252"
                             android:textSize="18dp"
-                            android:fontFamily="Roboto, sans-serif" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:id="@+id/rb_input_insidestream_activity_io_setting"
-                            android:text="內部音訊"
-                            android:textColor="#525252"
-                            android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:visibility="gone"/>
+                            android:visibility="visible"/>
 
                     </RadioGroup>
 
@@ -192,6 +199,7 @@
                         android:orientation="vertical"
                         android:id="@+id/rg_output_activity_io_setting">
 
+                        <!-- value: 0 -->
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -201,8 +209,10 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:checked="true"/>
+                            android:checked="true"
+                            android:visibility="visible"/>
 
+                        <!-- value: 1 -->
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -211,19 +221,20 @@
                             android:text="data file"
                             android:textColor="#525252"
                             android:textSize="18dp"
-                            android:fontFamily="Roboto, sans-serif" />
-                            <!--android:visibility="gone"-->
+                            android:fontFamily="Roboto, sans-serif"
+                            android:visibility="visible"/>
 
-
+                        <!-- value: 2 -->
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:id="@+id/rb_output_wmv_activity_io_setting"
-                            android:text="wmv"
+                            android:text="存檔"
                             android:textColor="#525252"
                             android:textSize="18dp"
-                            android:fontFamily="Roboto, sans-serif"/>
+                            android:fontFamily="Roboto, sans-serif"
+                            android:visibility="visible"/>
 
                     </RadioGroup>
 

@@ -18,7 +18,7 @@
     <string name="copyright_activity_logo">© 2015 NTOU CS LAB505</string>
     <!-- string of service activity -->
     <string name="play_activity_service">PLAY</string>
-    <string name="setting_activity_service">SETTING</string>
+    <string name="setting_activity_service">設定</string>
 
 
     <string name="hello_world">Hello world!</string>

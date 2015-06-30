@@ -23,11 +23,13 @@ import ntou.cs.lab505.oblivionii.sound.SoundService.SoundServiceBinder;
 
 public class ServiceActivity extends Activity {
 
-    boolean serviceState = false;
-    boolean boundState = false;
+    boolean serviceState = false;  // denote is start service or not. it doesn't denote SoundService object's work state.
+    boolean boundState = false;  // denote service bind state.
+    // service object.
     private SoundService soundService;
 
     ImageView controlButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class ServiceActivity extends Activity {
     protected void onStart() {
         Log.d("ServiceActivity", "in onStart.");
         super.onStart();
+
         Intent intent = new Intent(this, SoundService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
@@ -66,42 +69,74 @@ public class ServiceActivity extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
+
         if (boundState) {
+            if (soundService.getServiceState()) {
+                soundService.serviceStop();
+                controlButton.setImageResource(R.drawable.ic_music_player_play_orange_128);
+                serviceState = false;
+            }
+
             unbindService(serviceConnection);
             boundState = false;
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (checkServiceState() == false) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            TextView message = new TextView(this);
+            message.setText("請先設定助聽器參數");
+            //message.setGravity(Gravity.CENTER);
+            builder.setView(message);
+            builder.setPositiveButton("OK", null);
+            AlertDialog dialong = builder.show();
+            dialong.show();
+
+            return ;
+        }
+    }
+
     public void buttonService(View view) {
 
+        if (checkServiceState() == false) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            TextView message = new TextView(this);
+            message.setText("請先設定助聽器參數");
+            //message.setGravity(Gravity.CENTER);
+            builder.setView(message);
+            builder.setPositiveButton("OK", null);
+            AlertDialog dialong = builder.show();
+            dialong.show();
+
+            return ;
+        }
+
+
         if (serviceState == false) {
-            if (checkServiceState() == false) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                TextView message = new TextView(this);
-                message.setText("請先設定助聽器參數");
-                //message.setGravity(Gravity.CENTER);
-                builder.setView(message);
-                builder.setPositiveButton("OK", null);
-                AlertDialog dialong = builder.show();
-                dialong.show();
-
-                return ;
-            }
-
             if (boundState) {
                 soundService.initService();
 
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
                 controlButton.setImageResource(R.drawable.ic_music_player_pause_lines_orange_128);
                 serviceState = true;
-
                 soundService.serviceStart();
             }
         }else {
-            controlButton.setImageResource(R.drawable.ic_music_player_play_orange_128);
-            serviceState = false;
-
             if (boundState) {
                 soundService.serviceStop();
+                controlButton.setImageResource(R.drawable.ic_music_player_play_orange_128);
+                serviceState = false;
             }
         }
     }
@@ -123,7 +158,7 @@ public class ServiceActivity extends Activity {
         freqSettingAdapter.open();
         bandSettingAdapter.open();
 
-        if (ioSettingAdapter.getDataNumber() == 0 && freqSettingAdapter.getDataNumber() == 0 && bandSettingAdapter.getDataNumber() == 0) {
+        if (ioSettingAdapter.getDataNumber() == 0 || freqSettingAdapter.getDataNumber() == 0 || bandSettingAdapter.getDataNumber() == 0) {
             state = false;
         } else {
             state = true;
@@ -132,8 +167,6 @@ public class ServiceActivity extends Activity {
         ioSettingAdapter.close();
         freqSettingAdapter.close();
         bandSettingAdapter.close();
-
-        //Log.d("ServiceActivity", "in checkServiceState. state: " + state);
 
         return state;
     }

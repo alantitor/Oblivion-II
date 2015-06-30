@@ -16,6 +16,7 @@ public class FrequencyShift extends Thread {
     private LinkedBlockingQueue<SoundVectorUnit> outputDataQueue;
 
     private JNISoundTouch soundtouch = new JNISoundTouch();  // sound process object
+
     private int sampleRate;
     private int channels;
     private int pitchSemiTones;
@@ -28,6 +29,7 @@ public class FrequencyShift extends Thread {
      * constructor
      */
     public FrequencyShift() {
+        this.threadState = false;
         this.sampleRate = 16000;
         this.channels = 1;
         this.pitchSemiTones = 0;
@@ -35,7 +37,16 @@ public class FrequencyShift extends Thread {
         this.tempoChange = 0.0f;
     }
 
+    /**
+     *
+     * @param sampleRate
+     * @param channels
+     * @param pitchSemiTones
+     * @param rateChange
+     * @param tempoChange
+     */
     public FrequencyShift(int sampleRate, int channels, int pitchSemiTones, int rateChange, int tempoChange) {
+        this.threadState = false;
         this.sampleRate = sampleRate;
         this.channels = channels;
         this.pitchSemiTones = pitchSemiTones;
@@ -151,7 +162,7 @@ public class FrequencyShift extends Thread {
             }
 
             this.stopTime = System.nanoTime();
-            Log.d("FrequencyShift", "in run. time: " + (double)(stopTime - startTime) / 1000000.0);
+            //Log.d("FrequencyShift", "in run. time: " + (double)(stopTime - startTime) / 1000000.0);
         }
 
         Log.d("FrequencyShift", "in run. process stop.");

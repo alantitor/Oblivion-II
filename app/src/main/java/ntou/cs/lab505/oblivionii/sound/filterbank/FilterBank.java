@@ -15,20 +15,39 @@ public class FilterBank extends Thread {
     private LinkedBlockingQueue<SoundVectorUnit> inputDataQueue;
     private LinkedBlockingQueue<SoundVectorUnit[]> outputDataQueue;
 
-    private int sampleRate = 16000;
+    private int sampleRate;
+    private int channelNumber;
     private final int filterOrder = 3;  // 設定濾波器階數. 階數愈高愈佳.
     private int filterBankNumber;  // 記錄濾波器個數(頻帶數).
-    private int channelNumber;
-    private long startTime;
-    private long stopTime;
 
     // 動態頻帶切割
-    private ArrayList<IIR> iirBandsLeft = null;
-    private ArrayList<IIR> iirBandsRight = null;
+    private ArrayList<IIR> iirBandsLeftList;
+    private ArrayList<IIR> iirBandsRightList;
+
+    private long threadStartTime;
+    private long threadStopTime;
 
 
     /**
-     * single band cut.
+     * Algorithm:
+     *  Input:
+     *      SoundVectorUnit.
+     *
+     *  Output:
+     *      SoundVectorUnit array.
+     *
+     *  Initial object:
+     *
+     *
+     *  Run:
+     *
+     *
+     *
+     */
+
+
+    /**
+     * one-channel one-band cut.
      * @param sampleRate
      * @param lowBand
      * @param highBand
@@ -37,29 +56,39 @@ public class FilterBank extends Thread {
         this.sampleRate = sampleRate;
         this.filterBankNumber = 1;
         this.channelNumber = 1;
-        this.iirBandsLeft = new ArrayList<>();
-        this.iirBandsLeft.add(new IIR(this.filterOrder, sampleRate, lowBand, highBand));
+        this.iirBandsLeftList = new ArrayList<>();
+
+        this.iirBandsLeftList.add(new IIR(this.filterOrder, sampleRate, lowBand, highBand));
     }
 
+    /**
+     * two-channel one-band cut.
+     * @param sampleRate
+     * @param leftLowBand
+     * @param leftHighBand
+     * @param rightLowBand
+     * @param rightHighBand
+     */
     public FilterBank(int sampleRate, int leftLowBand, int leftHighBand, int rightLowBand, int rightHighBand) {
         this.sampleRate = sampleRate;
         this.channelNumber = 2;
         this.filterBankNumber = 1;
-        this.iirBandsLeft = new ArrayList<>();
-        this.iirBandsRight = new ArrayList<>();
-        this.iirBandsLeft.add(new IIR(this.filterOrder, sampleRate, leftLowBand, leftHighBand));
-        this.iirBandsRight.add(new IIR(this.filterOrder, sampleRate, rightLowBand, rightHighBand));
+        this.iirBandsLeftList = new ArrayList<>();
+        this.iirBandsRightList = new ArrayList<>();
+
+        this.iirBandsLeftList.add(new IIR(this.filterOrder, sampleRate, leftLowBand, leftHighBand));
+        this.iirBandsRightList.add(new IIR(this.filterOrder, sampleRate, rightLowBand, rightHighBand));
     }
 
     public FilterBank(int sampleRate, BandSetUnit[] bandCutUnit) {
         this.sampleRate = sampleRate;
         this.filterBankNumber = bandCutUnit.length;
         this.channelNumber = 1;
-        this.iirBandsLeft = new ArrayList<>();
-        this.iirBandsRight = new ArrayList<>();
+        this.iirBandsLeftList = new ArrayList<>();
+        this.iirBandsRightList = new ArrayList<>();
 
         for (int i = 0; i < this.filterBankNumber; i++) {
-            iirBandsLeft.add(new IIR(this.filterOrder, sampleRate, bandCutUnit[i].getLowBand(), bandCutUnit[i].getHighBand()));
+            iirBandsLeftList.add(new IIR(this.filterOrder, sampleRate, bandCutUnit[i].getLowBand(), bandCutUnit[i].getHighBand()));
             //Log.d("FilterBank", "in FilterBank. low: " + bandCutUnit[i].getLowBand() + " , high: " + bandCutUnit[i].getHighBand());
         }
     }
@@ -68,12 +97,12 @@ public class FilterBank extends Thread {
         this.sampleRate = sampleRate;
         this.filterBankNumber = leftChannel.length;
         this.channelNumber = 2;
-        this.iirBandsLeft = new ArrayList<>();
-        this.iirBandsRight = new ArrayList<>();
+        this.iirBandsLeftList = new ArrayList<>();
+        this.iirBandsRightList = new ArrayList<>();
 
         for (int i = 0; i < this.filterBankNumber; i++) {
-            iirBandsLeft.add(new IIR(this.filterOrder, sampleRate, leftChannel[i].getLowBand(), leftChannel[i].getHighBand()));
-            iirBandsRight.add(new IIR(this.filterOrder, sampleRate, rightChannel[i].getLowBand(), rightChannel[i].getHighBand()));
+            iirBandsLeftList.add(new IIR(this.filterOrder, sampleRate, leftChannel[i].getLowBand(), leftChannel[i].getHighBand()));
+            iirBandsRightList.add(new IIR(this.filterOrder, sampleRate, rightChannel[i].getLowBand(), rightChannel[i].getHighBand()));
         }
     }
 
@@ -84,22 +113,23 @@ public class FilterBank extends Thread {
          * do not use this contructor.
          * */
 
+        /*
         this.sampleRate = sampleRate;
 
         for (int i = 0; i < bandGainSetUnitArrayList.size(); i++) {
             if (bandGainSetUnitArrayList.get(i).getLr() == 0) {
-                iirBandsLeft.add(new IIR(this.filterOrder, sampleRate, bandGainSetUnitArrayList.get(i).getLowBand(), bandGainSetUnitArrayList.get(i).getHighBand()));
+                // left channel.
+                iirBandsLeftList.add(new IIR(this.filterOrder, sampleRate, bandGainSetUnitArrayList.get(i).getLowBand(), bandGainSetUnitArrayList.get(i).getHighBand()));
             } else {
-                iirBandsRight.add(new IIR(this.filterOrder, sampleRate, bandGainSetUnitArrayList.get(i).getLowBand(), bandGainSetUnitArrayList.get(i).getHighBand()));
+                // right channel.
+                iirBandsRightList.add(new IIR(this.filterOrder, sampleRate, bandGainSetUnitArrayList.get(i).getLowBand(), bandGainSetUnitArrayList.get(i).getHighBand()));
             }
         }
-    }
 
-    /**
-     * multi band cut.
-     */
-    public FilterBank() {
-        // wait for coding.
+        if (iirBandsRightList.size() > 0) {
+            this.channelNumber = 2;
+        }
+        */
     }
 
     public void setInputDataQueue(LinkedBlockingQueue<SoundVectorUnit> inputDataQueue) {
@@ -127,6 +157,14 @@ public class FilterBank extends Thread {
     }
 
     /**
+     * check thread state.
+     * @return
+     */
+    public boolean threadState() {
+        return this.threadState;
+    }
+
+    /**
      * thread content.
      */
     public void run() {
@@ -137,7 +175,7 @@ public class FilterBank extends Thread {
 
         int count = 0;
         while (threadState) {
-            this.startTime = System.nanoTime();
+            //this.startTime = System.nanoTime();
             // take data from queue.
             inputUnit = null;
             //inputUnit = inputDataQueue.take();
@@ -154,7 +192,7 @@ public class FilterBank extends Thread {
 
             if (this.channelNumber == 1) {
                 for (int i = 0; i < this.filterBankNumber; i++) {
-                    outputUnit[i] = new SoundVectorUnit(iirBandsLeft.get(i).process(inputUnit.getLeftChannel().clone()));  // should I use clone()?
+                    outputUnit[i] = new SoundVectorUnit(iirBandsLeftList.get(i).process(inputUnit.getLeftChannel().clone()));  // should I use clone()?
                     //Log.d("FilterBank", "in runTest. outputUnit length: " + outputUnit[i].getVectorLength());
                     //short[] t = outputUnit[i].getLeftChannel();
                     //Log.d("debug", "value: " + t[1000] + t[1001] + t[1002] + t[1003]);
@@ -162,8 +200,8 @@ public class FilterBank extends Thread {
                 }
             } else if (this.channelNumber == 2) {
                 for (int i = 0; i < this.filterBankNumber; i++) {
-                    outputUnit[i] = new SoundVectorUnit(iirBandsLeft.get(i).process(inputUnit.getLeftChannel().clone()),
-                                                        iirBandsRight.get(i).process(inputUnit.getRightChannel().clone()));
+                    outputUnit[i] = new SoundVectorUnit(iirBandsLeftList.get(i).process(inputUnit.getLeftChannel().clone()),
+                                                        iirBandsRightList.get(i).process(inputUnit.getRightChannel().clone()));
                     //Log.d("FilterBank", "in runTest. outputUnit left length: " + outputUnit[i].getLeftChannel().length);
                     //Log.d("FilterBank", "in runTest. outputUnit right length: " + outputUnit[i].getRightChannel().length);
                 }
@@ -172,8 +210,8 @@ public class FilterBank extends Thread {
             }
 
             outputDataQueue.add(outputUnit);
-            this.stopTime = System.nanoTime();
-            Log.d("FilterBank", "in run. time: " + (double)(stopTime - startTime) / 1000000.0);
+            //this.stopTime = System.nanoTime();
+            //Log.d("FilterBank", "in run. time: " + (double)(stopTime - startTime) / 1000000.0);
         }
 
         Log.d("FilterBank", "in run. thread stop.");

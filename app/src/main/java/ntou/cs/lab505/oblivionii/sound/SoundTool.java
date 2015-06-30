@@ -1,7 +1,6 @@
 package ntou.cs.lab505.oblivionii.sound;
 
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,6 +25,7 @@ public class SoundTool {
         short[] outputVector = null;
 
         if (leftChannel != null && rightChannel != null) {  // we have two channel data.
+            //Log.d("SoundTool", "in channelTwo2One. I am here 1.");
             outputVector = new short[leftChannel.length * 2];
             // data: LRLRLRLR...
             for (int i = 0; i < leftChannel.length; i++) {
@@ -33,6 +33,7 @@ public class SoundTool {
                 outputVector[i * 2 + 1] = rightChannel[i];
             }
         } else if (leftChannel == null && rightChannel != null){  // we only have right channel data. set zero to left channel.
+            //Log.d("SoundTool", "in channelTwo2One. I am here 2.");
             outputVector = new short[rightChannel.length * 2];
             // data: 0R0R0R0R...
             for (int i = 0; i < rightChannel.length; i++) {
@@ -40,6 +41,7 @@ public class SoundTool {
                 outputVector[i * 2 + 1] = rightChannel[i];
             }
         } else if (leftChannel != null && rightChannel == null){  // we only have left channel data. set zero to right channel.
+            //Log.d("SoundTool", "in channelTwo2One. I am here 3.");
             outputVector = new short[leftChannel.length * 2];
             // data: L0L0L0L0...
             for (int i = 0; i < leftChannel.length; i++) {
@@ -47,6 +49,7 @@ public class SoundTool {
                 outputVector[i * 2 + 1] = 0;
             }
         } else {
+            //Log.d("SoundTool", "in channelTwo2One. I am here 4.");
             outputVector = new short[2];
             outputVector[0] = 0;
             outputVector[1] = 0;

@@ -3,7 +3,6 @@ package ntou.cs.lab505.oblivionii.stream.device;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.util.Log;
 
 /**
  * Created by alan on 6/11/15.
@@ -22,9 +21,11 @@ public class Speaker {
      * @param channelNumber 1: one channel. 2: two channels.
      */
     public Speaker(int sampleRate, int channelNumber) {
-        this.sampleRate = sampleRate;
+        /**
+         * if speaker get some problem, try add audioTrack buffer size. bufferSize + 2048, etc.
+         */
 
-        Log.d("debug1", "channel number: " + channelNumber);
+        this.sampleRate = sampleRate;
 
         if (channelNumber == 1) {
             speakerBufSize = AudioTrack.getMinBufferSize(sampleRate,

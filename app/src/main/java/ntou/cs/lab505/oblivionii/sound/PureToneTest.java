@@ -4,11 +4,9 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-import ntou.cs.lab505.oblivionii.datastructure.BandSetUnit;
 import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
 import ntou.cs.lab505.oblivionii.sound.filterbank.FilterBank;
 import ntou.cs.lab505.oblivionii.sound.frequencyshift.FrequencyShift;
@@ -16,9 +14,6 @@ import ntou.cs.lab505.oblivionii.sound.gain.Gain;
 import ntou.cs.lab505.oblivionii.sound.soundgeneration.HarmonicsGeneration;
 import ntou.cs.lab505.oblivionii.stream.SoundInputPool;
 import ntou.cs.lab505.oblivionii.stream.SoundOutputPool;
-
-import static ntou.cs.lab505.oblivionii.sound.SoundTool.saveVectorToDataFile;
-import static ntou.cs.lab505.oblivionii.stream.device.Speaker.checkOutputDeviceState;
 
 /**
  * Created by alan on 6/10/15.
@@ -36,7 +31,7 @@ public class PureToneTest extends Service {
     int valueGain;
     int valueChannel = 0;
     int valueOutput = 0;
-    int sampleRate = 16000;
+    int sampleRate = 8000;
     int frameSize = 1400;
     // sound vector
     short[] originSoundVector;
@@ -196,9 +191,6 @@ public class PureToneTest extends Service {
                         size = originSoundVector.length - start;
                     }
 
-                    //Log.d("debugArray", "array start: " + start);
-                    //Log.d("debugArray", "array size: " + size);
-
                     System.arraycopy(originSoundVector, start, tempSoundVector, 0, size);
 
                     if (tempSoundVector == null ||tempSoundVector.length == 0) {
@@ -210,10 +202,6 @@ public class PureToneTest extends Service {
                 }
             }
         }
-
-
-        // pipe sound.
-        //pureToneQueue.add(soundVectorUnit);
 
         frequencyShift.setInputDataQueue(pureToneQueue);
         frequencyShift.setOutputDataQueue(freqShiftQueue);

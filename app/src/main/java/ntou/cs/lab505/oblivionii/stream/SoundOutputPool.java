@@ -29,13 +29,15 @@ public class SoundOutputPool extends Thread {
 
     /**
      *
-     * @param samplerate
+     * @param sampleRate
      * @param channelNumber
      * @param lr
      * @param mode 0: speaker, 1: write to data file, 2: write to wmv file
      */
-    public SoundOutputPool(int samplerate, int channelNumber, int lr, int mode) {
-        this.sampleRate = samplerate;
+    public SoundOutputPool(int sampleRate, int channelNumber, int lr, int mode) {
+        //Log.d("SoundOutputPool", "in SoundOutputPool. initial success.");
+
+        this.sampleRate = sampleRate;
         this.channelNumber = channelNumber;
         this.lr = lr;
         this.mode = mode;
@@ -43,7 +45,7 @@ public class SoundOutputPool extends Thread {
         // initial object.
         switch (mode) {
             case 0:
-                speaker = new Speaker(samplerate, channelNumber);
+                speaker = new Speaker(sampleRate, channelNumber);
                 break;
             case 1:
                 writeFile = new WriteFile(0, "speaker");
@@ -53,9 +55,7 @@ public class SoundOutputPool extends Thread {
                 break;
             default:
                 this.mode = 0;
-                speaker = new Speaker(samplerate, channelNumber);
-                //this.mode = 1;
-                //writeFile = new WriteFile(0, "speaker");
+                speaker = new Speaker(sampleRate, channelNumber);
         }
     }
 
@@ -113,7 +113,6 @@ public class SoundOutputPool extends Thread {
         // do function.
         while (threadState) {
             // take data from queue.
-            inputUnit = null;
             inputUnit = inputDataQueue.poll();
 
             if (inputUnit == null) {
@@ -127,22 +126,27 @@ public class SoundOutputPool extends Thread {
 
             // merge channel sound data.
             if (this.channelNumber == 1) {
+                // one channel.
                 outputDataVector = inputUnit.getLeftChannel();
+                Log.d("SoundOutputPool", "in run. data: " + outputDataVector[101] + outputDataVector[102] + outputDataVector[103] + outputDataVector[104]);
             } else if (this.channelNumber == 2) {
+                // two channel.
                 if (inputUnit.getChannelNumber() == 1) {
                     if (lr == 0) {  // only output left ear.
-                        //Log.d("SoundOutputPool", "in run. left ear.");
+                        //Log.d("SoundOutputPool", "in run. play sound at left ear.");
                         outputDataVector = channelTwo2One(inputUnit.getLeftChannel(), null);
                     } else if (lr == 1){  // only output right ear.
-                        //Log.d("SoundOutputPool", "in run. right ear.");
+                        //Log.d("SoundOutputPool", "in run. play sound at right ear.");
                         outputDataVector = channelTwo2One(null, inputUnit.getLeftChannel());
                     } else {
+                        //Log.d("SoundOutputPool", "in run. play sound at two ears.");
                         outputDataVector = channelTwo2One(inputUnit.getLeftChannel(), inputUnit.getLeftChannel());
                     }
                 } else {
                     outputDataVector = channelTwo2One(inputUnit.getLeftChannel(), inputUnit.getRightChannel());
                 }
             } else {
+                // one channel.
                 this.channelNumber = 1;  // !!!
                 outputDataVector = inputUnit.getLeftChannel();
             }
@@ -170,7 +174,7 @@ public class SoundOutputPool extends Thread {
                 break;
             case 1:
             case 2:
-                   writeFile.close();
+                writeFile.close();
                 break;
             default:
                 break;

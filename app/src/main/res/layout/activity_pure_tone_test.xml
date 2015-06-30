@@ -72,7 +72,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:text="frequency: "/>
+                            android:text="頻率: "/>
 
                         <EditText
                             android:layout_width="70dp"
@@ -96,7 +96,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:text="dB: "/>
+                            android:text="分貝: "/>
 
                         <EditText
                             android:layout_width="70dp"
@@ -128,7 +128,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:text="harmonics: "/>
+                            android:text="諧波: "/>
 
                         <EditText
                             android:layout_width="70dp"
@@ -152,7 +152,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:text="sec: "/>
+                            android:text="秒: "/>
 
                         <EditText
                             android:layout_width="70dp"
@@ -194,7 +194,7 @@
                         android:textColor="#525252"
                         android:textSize="18dp"
                         android:fontFamily="Roboto, sans-serif"
-                        android:text="band cut: "/>
+                        android:text="頻帶: "/>
 
                     <EditText
                         android:layout_width="70dp"
@@ -240,7 +240,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:text="semitones: "/>
+                            android:text="頻率調整: "/>
 
                         <EditText
                             android:layout_width="70dp"
@@ -264,7 +264,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:text="gain: "/>
+                            android:text="音量增強: "/>
 
                         <EditText
                             android:layout_width="70dp"
@@ -295,7 +295,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:text="channel: "/>
+                            android:text="聲道: "/>
 
                         <RadioGroup
                             android:layout_width="wrap_content"
@@ -309,7 +309,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:id="@+id/rb_channel_left_activity_pure_tone_test"
-                                android:text="left"
+                                android:text="左"
                                 android:textColor="#525252"
                                 android:textSize="18dp"
                                 android:fontFamily="Roboto, sans-serif"
@@ -320,7 +320,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:id="@+id/rb_channel_right_activity_pure_tone_test"
-                                android:text="right"
+                                android:text="右"
                                 android:textColor="#525252"
                                 android:textSize="18dp"
                                 android:fontFamily="Roboto, sans-serif"/>
@@ -348,7 +348,7 @@
                             android:textColor="#525252"
                             android:textSize="18dp"
                             android:fontFamily="Roboto, sans-serif"
-                            android:text="output: "/>
+                            android:text="輸出: "/>
 
                         <RadioGroup
                             android:layout_width="wrap_content"
@@ -362,7 +362,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:id="@+id/rb_output_speker_activity_pure_tone_test"
-                                android:text="speaker"
+                                android:text="揚聲器"
                                 android:checked="true"
                                 android:textColor="#525252"
                                 android:textSize="18dp"
@@ -373,7 +373,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:id="@+id/rb_output_df_activity_pure_tone_test"
-                                android:text="file"
+                                android:text="檔案"
                                 android:textColor="#525252"
                                 android:textSize="18dp"
                                 android:fontFamily="Roboto, sans-serif"/>
@@ -386,7 +386,8 @@
                                 android:text="wmv"
                                 android:textColor="#525252"
                                 android:textSize="18dp"
-                                android:fontFamily="Roboto, sans-serif"/>
+                                android:fontFamily="Roboto, sans-serif"
+                                android:visibility="gone"/>
 
                         </RadioGroup>
 
@@ -408,7 +409,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="START"
+                            android:text="開始"
                             android:clickable="true"
                             android:onClick="buttonTest"/>
 
@@ -418,6 +419,7 @@
 
             </LinearLayout>
 
+            <!--
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -492,6 +494,7 @@
                 </LinearLayout>
 
             </LinearLayout>
+            -->
 
         </LinearLayout>
 

@@ -112,48 +112,6 @@ public class BandSettingActivity extends Activity {
         super.onResume();
 
         loadData();
-        /*
-        // get data from database.
-        BandSettingAdapter bandSettingAdapter = new BandSettingAdapter(this.getApplicationContext());
-        bandSettingAdapter.open();
-        ArrayList<BandGainSetUnit> bandGainSetUnitArrayList = bandSettingAdapter.getData();
-        bandSettingAdapter.close();
-
-        // load data to layout.
-        LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LinearLayout leftBorder = (LinearLayout) findViewById(R.id.drawarea_left_activity_band_setting);
-        LinearLayout rightBorder = (LinearLayout) findViewById(R.id.drawarea_right_activity_band_setting);
-        leftBorder.removeAllViews();
-        rightBorder.removeAllViews();
-
-
-        Log.d("BandSettingActivity", "in onResume. size:" + bandGainSetUnitArrayList.size());
-
-        for (int count = 0; count < bandGainSetUnitArrayList.size(); count++) {
-            if (bandGainSetUnitArrayList.get(count).getLr() == 0) {
-                View view = layoutInflater.inflate(view_bandgain, null);
-                EditText ETLowBand = (EditText) view.findViewById(R.id.lowBand_view_bandgain);
-                EditText ETHighBand = (EditText) view.findViewById(R.id.highband_view_bandgain);
-                EditText ETGain40 = (EditText) view.findViewById(R.id.gain40_view_bandgain);
-                EditText ETGain60 = (EditText) view.findViewById(R.id.gain60_view_bandgain);
-                EditText ETGain80 = (EditText) view.findViewById(R.id.gain80_view_bandgain);
-
-                ETLowBand.setText(bandGainSetUnitArrayList.get(count).getLowBand() + "");
-                ETHighBand.setText(bandGainSetUnitArrayList.get(count).getHighBand() + "");
-                ETGain40.setText(bandGainSetUnitArrayList.get(count).getGain40() + "");
-                ETGain60.setText(bandGainSetUnitArrayList.get(count).getGain60() + "");
-                ETGain80.setText(bandGainSetUnitArrayList.get(count).getGain80() + "");
-
-                leftBorder.addView(view);
-            } else if (bandGainSetUnitArrayList.get(count).getLr() == 1) {
-
-            } else {
-                Log.d("BandSettingActivity", "in onResume. continue.");
-            }
-        }
-
-        // set seekBar progress.
-        */
     }
 
     /**
@@ -171,8 +129,8 @@ public class BandSettingActivity extends Activity {
 
         int leftItemCount = leftRootLayout.getChildCount();
         int rightItemCount = rightRootLayout.getChildCount();
-        Log.d("BandSettingActivity", "in onPause. left item count: " + leftItemCount);
-        Log.d("BandSettingActivity", "in onPause. right item count" + rightItemCount);
+        //Log.d("BandSettingActivity", "in onPause. left item count: " + leftItemCount);
+        //Log.d("BandSettingActivity", "in onPause. right item count" + rightItemCount);
 
         BandSettingAdapter bandSettingAdapter = new BandSettingAdapter(this.getApplicationContext());
         bandSettingAdapter.open();
@@ -234,7 +192,7 @@ public class BandSettingActivity extends Activity {
 
         // save data to database.
         bandSettingAdapter.saveData(bandGainSetUnitArrayList);
-        Log.d("BandSettingActivity", "in onPuase. size: " + bandGainSetUnitArrayList.size());
+        //Log.d("BandSettingActivity", "in onPuase. size: " + bandGainSetUnitArrayList.size());
         // close database
         bandSettingAdapter.close();
     }
@@ -248,6 +206,7 @@ public class BandSettingActivity extends Activity {
         bandSettingAdapter.close();
 
 
+        // check band number.
         int leftItemCount = 0;
         int rightItemCount = 0;
 
@@ -269,7 +228,7 @@ public class BandSettingActivity extends Activity {
 
         TextView leftCountTV = (TextView) findViewById(R.id.count_left_activity_band_setting);
         TextView rightCountTV = (TextView) findViewById(R.id.count_right_activity_band_setting);
-        leftCountTV.setText(leftItemCount + "");
+        leftCountTV.setText(leftItemCount + "");  // integer to string.
         rightCountTV.setText(rightItemCount + "");
 
 
@@ -280,7 +239,6 @@ public class BandSettingActivity extends Activity {
         leftBorder.removeAllViews();
         rightBorder.removeAllViews();
 
-        Log.d("BandSettingActivity", "in onResume. size:" + bandGainSetUnitArrayList.size());
 
         for (int count = 0; count < bandGainSetUnitArrayList.size(); count++) {
             if (bandGainSetUnitArrayList.get(count).getLr() == 0) {
@@ -314,7 +272,7 @@ public class BandSettingActivity extends Activity {
 
                 rightBorder.addView(view);
             } else {
-                Log.d("BandSettingActivity", "in onResume. continue.");
+                Log.d("BandSettingActivity", "in onResume. wrong data in database.");
             }
         }
     }
