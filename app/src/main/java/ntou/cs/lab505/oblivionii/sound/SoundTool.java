@@ -1,11 +1,13 @@
 package ntou.cs.lab505.oblivionii.sound;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
 
@@ -25,7 +27,7 @@ public class SoundTool {
         short[] outputVector = null;
 
         if (leftChannel != null && rightChannel != null) {  // we have two channel data.
-            //Log.d("SoundTool", "in channelTwo2One. I am here 1.");
+            Log.d("SoundTool", "in channelTwo2One. I am here 1.");
             outputVector = new short[leftChannel.length * 2];
             // data: LRLRLRLR...
             for (int i = 0; i < leftChannel.length; i++) {
@@ -33,7 +35,7 @@ public class SoundTool {
                 outputVector[i * 2 + 1] = rightChannel[i];
             }
         } else if (leftChannel == null && rightChannel != null){  // we only have right channel data. set zero to left channel.
-            //Log.d("SoundTool", "in channelTwo2One. I am here 2.");
+            Log.d("SoundTool", "in channelTwo2One. I am here 2.");
             outputVector = new short[rightChannel.length * 2];
             // data: 0R0R0R0R...
             for (int i = 0; i < rightChannel.length; i++) {
@@ -41,7 +43,7 @@ public class SoundTool {
                 outputVector[i * 2 + 1] = rightChannel[i];
             }
         } else if (leftChannel != null && rightChannel == null){  // we only have left channel data. set zero to right channel.
-            //Log.d("SoundTool", "in channelTwo2One. I am here 3.");
+            Log.d("SoundTool", "in channelTwo2One. I am here 3.");
             outputVector = new short[leftChannel.length * 2];
             // data: L0L0L0L0...
             for (int i = 0; i < leftChannel.length; i++) {
@@ -49,7 +51,7 @@ public class SoundTool {
                 outputVector[i * 2 + 1] = 0;
             }
         } else {
-            //Log.d("SoundTool", "in channelTwo2One. I am here 4.");
+            Log.d("SoundTool", "in channelTwo2One. I am here 4.");
             outputVector = new short[2];
             outputVector[0] = 0;
             outputVector[1] = 0;
@@ -59,7 +61,7 @@ public class SoundTool {
     }
 
     /**
-     * merge band vector two sound vector.
+     * merge band vector two sound vector. don't use this method.
      * @param soundVectorUnits
      * @return
      */
@@ -101,6 +103,22 @@ public class SoundTool {
         }
 
         return outputVector;
+    }
+
+    public static short[] channelMix(ArrayList<short[]> soundBands) {
+        short[] tempVector = new short[soundBands.get(0).length];
+        int temp = 0;
+
+        for (int trace = 0; trace < soundBands.get(0).length; trace++) {
+            for (int i = 0; i < soundBands.size(); i++) {
+                temp += soundBands.get(i)[trace];
+            }
+
+            tempVector[trace] = (short) temp;
+            temp = 0;
+        }
+
+        return tempVector;
     }
 
     /*
@@ -151,7 +169,7 @@ public class SoundTool {
         }
     }
 
-    public static double mag2db(int value) {
+    public static double mag2db(double value) {
         return Math.pow(10, value / 20);
     }
 }

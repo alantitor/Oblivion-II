@@ -10,6 +10,7 @@ import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
 import ntou.cs.lab505.oblivionii.sound.filterbank.IIR;
 
 import static ntou.cs.lab505.oblivionii.sound.SoundTool.calculateDb;
+import static ntou.cs.lab505.oblivionii.sound.SoundTool.channelMix;
 import static ntou.cs.lab505.oblivionii.sound.SoundTool.mag2db;
 
 /**
@@ -119,9 +120,11 @@ public class BandGain extends Thread{
         Log.d("BandGain", "in run. thread start.");
         SoundVectorUnit inputUnit = null;
         SoundVectorUnit outputUnit = null;
+        short[] tempSoundVector = null;
 
 
         while (threadState) {
+            threadStartTime = System.nanoTime();
             // take data from queue.
             inputUnit = inputDataQueue.poll();
 
@@ -133,6 +136,8 @@ public class BandGain extends Thread{
                 continue;
             }
             //Log.d("BandGain", "in run. inputUnit length: " + inputUnit.getVectorLength());
+            tempSoundVector = inputUnit.getLeftChannel().clone();
+            //Log.d("BandGain", "in run. tempSoundVector length: " + tempSoundVector.length);
 
 
             // process data.
@@ -140,39 +145,50 @@ public class BandGain extends Thread{
                 // read left channel data.
                 for (int count = 0; count < filterBankNumberLeft; count++) {
                     // cut bands.
-                    soundBandListL.add(iirLeftList.get(count).process(inputUnit.getLeftChannel().clone()));  // should I use clone()?
+                    soundBandListL.add(iirLeftList.get(count).process(tempSoundVector.clone()));  // should I use clone()?
+                    Log.d("BandGain", "in run. db before: " + calculateDb(soundBandListL.get(count)));
                     // gain db.
                     soundBandListL.set(count, autoGain(soundBandListL.get(count), count, 0));
+                    Log.d("BandGain", "in run. db after: " + calculateDb(soundBandListL.get(count)));
                 }
             } else if (channelNumber == 2) {
                 // read left channel data.
                 for (int count = 0; count < filterBankNumberLeft; count++) {
-                    soundBandListL.add(iirLeftList.get(count).process(inputUnit.getLeftChannel().clone()));
+                    // cut bands.
+                    soundBandListL.add(iirLeftList.get(count).process(tempSoundVector.clone()));  // should I use clone()?
+                    Log.d("BandGain", "in run. left db before: " + calculateDb(soundBandListL.get(count)));
+                    // gain db.
                     soundBandListL.set(count, autoGain(soundBandListL.get(count), count, 0));
+                    Log.d("BandGain", "in run. left db after: " + calculateDb(soundBandListL.get(count)));
                 }
                 // read right channel data.
                 for (int count = 0; count < filterBankNumberRight; count++) {
-                    soundBandListR.add(iirRightList.get(count).process(inputUnit.getLeftChannel().clone()));
+                    // cut bands.
+                    soundBandListR.add(iirRightList.get(count).process(tempSoundVector.clone()));
+                    Log.d("BandGain", "in run. right db before: " + calculateDb(soundBandListR.get(count)));
+                    // gain db.
                     soundBandListR.set(count, autoGain(soundBandListR.get(count), count, 1));
+                    Log.d("BandGain", "in run. right db after: " + calculateDb(soundBandListR.get(count)));
                 }
             } else {
                 //
             }
 
 
-            // check data correction.
-            Log.d("BandGain", "in run. left Channel number: " + soundBandListL.size());
-            Log.d("BandGain", "in run. right Channel number: " + soundBandListR.size());
-            //saveVectorToDataFile();
-
-
             // mix bands.
-            // leftVector = ...
-            // rightVector = ...
+            if (channelNumber == 1) {
+                outputUnit = new SoundVectorUnit(channelMix(soundBandListL), null);
+            } else if (channelNumber == 2) {
+                outputUnit = new SoundVectorUnit(channelMix(soundBandListL), channelMix(soundBandListR));
+            } else {
+                outputUnit = new SoundVectorUnit(channelMix(soundBandListL), null);
+            }
 
+            Log.d("BandGain", "in run. db left mix: " + calculateDb(outputUnit.getLeftChannel()));
+            Log.d("BandGain", "in run. db right mix: " + calculateDb(outputUnit.getRightChannel()));
 
             // output data.
-            //outputDataQueue.add(outputUnit);
+            outputDataQueue.add(outputUnit);
             // clear temp space.
             soundBandListL.clear();
             soundBandListR.clear();

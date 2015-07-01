@@ -118,7 +118,7 @@ public class SoundOutputPool extends Thread {
             if (inputUnit == null) {
                 continue;
             }
-            if (inputUnit.getVectorLength() == 0) {
+            if (inputUnit.getLeftChannel() == null || inputUnit.getVectorLength() == 0) {
                 continue;
             }
             //Log.d("SoundOutputPool", "in run. inputUnit length: " + inputUnit.getVectorLength());
@@ -143,6 +143,7 @@ public class SoundOutputPool extends Thread {
                         outputDataVector = channelTwo2One(inputUnit.getLeftChannel(), inputUnit.getLeftChannel());
                     }
                 } else {
+                    Log.d("SoundOutputPool", "in run. play sound at two ears.");
                     outputDataVector = channelTwo2One(inputUnit.getLeftChannel(), inputUnit.getRightChannel());
                 }
             } else {

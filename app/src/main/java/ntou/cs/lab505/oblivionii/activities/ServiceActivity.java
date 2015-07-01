@@ -120,13 +120,13 @@ public class ServiceActivity extends Activity {
             if (boundState) {
                 soundService.initService();
 
-
+                /*
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
+                */
 
                 controlButton.setImageResource(R.drawable.ic_music_player_pause_lines_orange_128);
                 serviceState = true;

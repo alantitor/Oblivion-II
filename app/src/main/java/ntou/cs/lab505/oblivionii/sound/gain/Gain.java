@@ -9,7 +9,7 @@ import ntou.cs.lab505.oblivionii.datastructure.GainSetUnit;
 import ntou.cs.lab505.oblivionii.datastructure.SoundVectorUnit;
 
 import static ntou.cs.lab505.oblivionii.sound.SoundTool.calculateDb;
-import static ntou.cs.lab505.oblivionii.sound.SoundTool.channelMix;
+ import static ntou.cs.lab505.oblivionii.sound.SoundTool.channelMix;
 
 /**
  * Created by alan on 6/10/15.
