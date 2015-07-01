@@ -150,4 +150,8 @@ public class SoundTool {
             e.printStackTrace();
         }
     }
+
+    public static double mag2db(int value) {
+        return Math.pow(10, value / 20);
+    }
 }
